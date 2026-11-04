@@ -408,6 +408,32 @@ footer{font-size:13px}
 .sk-ph img{animation:photoGlitch 6s steps(1) infinite}
 @keyframes photoGlitch{0%,93%,100%{translate:0 0;filter:none}94%{translate:-3px 0;filter:drop-shadow(3px 0 rgba(255,0,60,.35)) drop-shadow(-3px 0 rgba(0,220,255,.35))}95.5%{translate:2px 0;filter:drop-shadow(-2px 0 rgba(255,0,60,.3)) drop-shadow(2px 0 rgba(0,220,255,.3))}97%{translate:0 0;filter:none}}
 
+/* ---------- preloader ---------- */
+.pre{position:fixed;inset:0;z-index:100;background:#120c09;color:var(--on-dark);display:grid;grid-template-rows:auto 1fr auto auto;padding:calc(22px + env(safe-area-inset-top,0px)) max(22px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(22px,env(safe-area-inset-left,0px));overflow:hidden;animation:preFallback 0s 7s forwards}
+@keyframes preFallback{to{visibility:hidden;opacity:0}}
+.pre-glow{position:absolute;inset:-20%;background:radial-gradient(40% 40% at 50% 55%,rgba(255,90,20,.55),rgba(255,90,20,0) 70%);filter:blur(10px);opacity:.15;transform:scale(.6);transition:opacity .4s,transform .4s;pointer-events:none}
+.pre-top,.pre-bot{position:relative;display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.pre-logo{font-weight:800;font-size:15px;letter-spacing:-.03em}
+.pre-logo sup{color:var(--accent);font-size:9px}
+.pre-meta,.pre-hint{font-size:11px;text-transform:uppercase;letter-spacing:.1em;opacity:.55}
+.pre-mid{position:relative;display:grid;place-items:center;align-content:center;gap:18px}
+.pre-star{width:54px;height:54px;color:var(--accent);animation:thinkSpin 1.6s cubic-bezier(.6,0,.4,1) infinite}
+.pre-words{position:relative;height:1.2em;overflow:hidden;font-size:clamp(22px,3vw,34px);font-weight:600;letter-spacing:-.03em;text-align:center;min-width:8em}
+.pre-words span{position:absolute;inset:0;transform:translateY(110%);animation:preWord 2.4s cubic-bezier(.7,0,.2,1) infinite}
+.pre-words span:nth-child(2){animation-delay:.6s}.pre-words span:nth-child(3){animation-delay:1.2s}.pre-words span:nth-child(4){animation-delay:1.8s}
+@keyframes preWord{0%{transform:translateY(110%)}8%,25%{transform:none}33%,100%{transform:translateY(-110%)}}
+.pre-num{font-weight:800;line-height:.8;letter-spacing:-.06em;font-size:clamp(72px,14vw,200px);font-variant-numeric:tabular-nums;display:flex;align-items:flex-start}
+.pre-num i{font-style:normal;font-size:.3em;color:var(--accent);margin-left:.08em;letter-spacing:0}
+.pre-bar{position:relative;height:2px;background:rgba(255,255,255,.12);margin-top:18px;border-radius:2px;overflow:hidden}
+.pre-bar i{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.pre.glitch .pre-num{animation:preGlitch .4s steps(1) 1}
+@keyframes preGlitch{0%{transform:translate(-4px,0) skewX(-6deg);text-shadow:4px 0 rgba(255,0,60,.8),-4px 0 rgba(0,220,255,.8)}25%{transform:translate(4px,0);text-shadow:-4px 0 rgba(255,0,60,.8),4px 0 rgba(0,220,255,.8)}50%{transform:translate(-2px,0) skewX(4deg);text-shadow:2px 0 rgba(255,0,60,.6),-2px 0 rgba(0,220,255,.6)}75%,100%{transform:none;text-shadow:none}}
+.pre.out{transform:translateY(-100%);border-radius:0 0 50% 50%/0 0 22% 22%;transition:transform 1s cubic-bezier(.76,0,.24,1),border-radius 1s cubic-bezier(.76,0,.24,1)}
+.pre.out .pre-top,.pre.out .pre-mid,.pre.out .pre-bot,.pre.out .pre-bar{opacity:0;transform:translateY(-40px);transition:opacity .4s,transform .6s cubic-bezier(.7,0,.2,1)}
+.pre.gone{display:none}
+html.loading,html.loading body{overflow:hidden}
+@media (prefers-reduced-motion:reduce){.pre{display:none}}
+
 /* ---------- motion ---------- */
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
 .ln>span{display:block}
@@ -460,6 +486,17 @@ footer{font-size:13px}
 </head>
 <body>
 
+
+<div class="pre" id="pre" aria-hidden="true">
+  <div class="pre-glow"></div>
+  <div class="pre-top"><span class="pre-logo">ialexrd<sup>●</sup></span><span class="pre-meta">AI веб-дизайнер · Калининград</span></div>
+  <div class="pre-mid">
+    <svg class="pre-star" viewBox="0 0 40 40"><g fill="currentColor"><rect x="18.5" y="2" width="3" height="14" rx="1.5"/><rect x="18.5" y="24" width="3" height="14" rx="1.5"/><rect x="2" y="18.5" width="14" height="3" rx="1.5"/><rect x="24" y="18.5" width="14" height="3" rx="1.5"/><rect x="18.5" y="2" width="3" height="14" rx="1.5" transform="rotate(45 20 20)"/><rect x="18.5" y="24" width="3" height="14" rx="1.5" transform="rotate(45 20 20)"/><rect x="2" y="18.5" width="14" height="3" rx="1.5" transform="rotate(45 20 20)"/><rect x="24" y="18.5" width="14" height="3" rx="1.5" transform="rotate(45 20 20)"/></g></svg>
+    <div class="pre-words"><span>Дизайн</span><span>Сайты</span><span>CRM</span><span>Нейросети</span></div>
+  </div>
+  <div class="pre-bot"><span class="pre-hint">Загружаю портфолио</span><span class="pre-num"><b id="pre-n">0</b><i>%</i></span></div>
+  <div class="pre-bar"><i id="pre-bar"></i></div>
+</div>
 
 <div class="hero-shell">
   <header class="hero" id="top">
@@ -790,15 +827,46 @@ footer{font-size:13px}
       document.querySelectorAll('.lang button').forEach(function(x){x.setAttribute('aria-pressed',String(x===btn))});
     });
   });
-  // start the hero intro once the photo and fonts are loaded (max 1.5 s wait)
+  // hero intro starts when the preloader leaves
   var started=false;
   function start(){if(!started){started=true;requestAnimationFrame(function(){root.classList.add('ready')})}}
-  var heroImg=document.querySelector('.hero-ph');
-  Promise.all([
-    heroImg&&heroImg.decode?heroImg.decode().catch(function(){}):null,
-    document.fonts?document.fonts.ready:null
-  ]).then(start);
-  setTimeout(start,1500);
+
+  // preloader: counter follows real loading (photo, fonts, page), at least 1.8 s, at most 5 s
+  var pre=document.getElementById('pre');
+  if(!pre||still){if(pre)pre.classList.add('gone');start()}
+  else{
+    root.classList.add('loading');
+    var nEl=document.getElementById('pre-n'), bar=document.getElementById('pre-bar'), glow=pre.querySelector('.pre-glow');
+    var heroImg=document.querySelector('.hero-ph'), loaded=0, total=3, shown=0, t0=performance.now(), done=false;
+    function one(){loaded++}
+    (heroImg&&heroImg.decode?heroImg.decode():Promise.resolve()).then(one,one);
+    (document.fonts?document.fonts.ready:Promise.resolve()).then(one,one);
+    if(document.readyState==='complete') one(); else window.addEventListener('load',one);
+    (function step(now){
+      var el=now-t0;
+      var target=Math.min(loaded/total*100, el/1800*100);
+      if(el>5000) target=100;
+      shown+=(target-shown)*0.08+(target>shown?0.15:0);
+      if(shown>target) shown=target;
+      var v=Math.floor(shown);
+      nEl.textContent=v;
+      bar.style.transform='scaleX('+(shown/100)+')';
+      glow.style.opacity=(.15+shown/100*.85).toFixed(2);
+      glow.style.transform='scale('+(.6+shown/100*.6).toFixed(2)+')';
+      if(v>=100&&!done){
+        done=true;
+        pre.classList.add('glitch');
+        setTimeout(function(){
+          pre.classList.add('out');
+          root.classList.remove('loading');
+          start();
+          setTimeout(function(){pre.classList.add('gone')},1100);
+        },450);
+        return;
+      }
+      requestAnimationFrame(step);
+    })(t0);
+  }
   if(still) return;
   root.classList.add('js');
   // skill cards: Figma frame resizes, terminal types commands
@@ -869,6 +937,7 @@ footer{font-size:13px}
   if(fine){
     root.style.scrollBehavior='auto';
     window.addEventListener('wheel',function(e){
+      if(root.classList.contains('loading')){e.preventDefault();return}
       if(e.ctrlKey||e.defaultPrevented) return;
       e.preventDefault();
       var d=e.deltaY*(e.deltaMode===1?40:e.deltaMode===2?window.innerHeight:1);
