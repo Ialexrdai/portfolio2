@@ -1081,8 +1081,8 @@ body{margin:8px}
       if(trail.length){var r=w.el.getBoundingClientRect();if(r.bottom>-50&&r.top<H+50){var x=r.left+r.width/2,y=r.top+r.height/2,rw=Math.max(60,r.width*.5);
         for(var j=0;j<trail.length;j++){var p=trail[j],ax=Math.max(0,Math.abs(p.x-x)-rw*.6),ay=Math.max(0,Math.abs(p.y-y)-r.height*.3);var f=Math.exp(-(ax*ax+ay*ay)/3600)*(1-(now-p.t)/900);if(f>target)target=f}}}
       w.s+=(target-w.s)*Math.min(1,dt*(target>w.s?14:4));
-      var s=w.s*.5,st=w.el.style;
-      if(s>.02){var d=(s*7).toFixed(1);if(!w.soft)st.transform='translateX('+(s*6).toFixed(1)+'px) skewX('+(-s*10).toFixed(1)+'deg)';st.filter='blur('+(s*1.6).toFixed(2)+'px)';st.textShadow=d+'px 0 rgba(255,40,90,.55),-'+d+'px 0 rgba(0,190,255,.55)';w.on=true}
+      var s=w.s*.6,st=w.el.style;
+      if(s>.02){var d=(s*3).toFixed(1);if(!w.soft)st.transform='translateX('+(s*2).toFixed(1)+'px)';st.textShadow=d+'px 0 rgba(255,40,90,'+(s*.7).toFixed(2)+'),-'+d+'px 0 rgba(0,190,255,'+(s*.7).toFixed(2)+')';w.on=true}
       else if(w.on){st.transform='';st.filter='';st.textShadow='';w.on=false}}}
   // star trail: dots spawned along the path, a few with a four-point sparkle, drifting and fading
   var sc=document.createElement('canvas');sc.className='stars';sc.setAttribute('aria-hidden','true');document.body.appendChild(sc);var sx=sc.getContext('2d'),parts=[],lx=null,ly=null;
