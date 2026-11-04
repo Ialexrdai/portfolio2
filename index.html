@@ -434,6 +434,74 @@ footer{font-size:13px}
 html.loading,html.loading body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pre{display:none}}
 
+/* ---------- who I am: horizontal scroll ---------- */
+.hs{position:relative}
+.hs-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center}
+.hs-track{display:flex;gap:16px;padding-inline:max(10px,env(safe-area-inset-left,0px));will-change:transform}
+.hs-panel{flex:none;width:min(1240px,calc(100vw - 80px));height:min(760px,calc(100svh - 40px));border-radius:var(--r-xl);overflow:hidden;position:relative;padding:clamp(24px,3vw,44px);display:flex;flex-direction:column;gap:20px}
+.hs-h{font-size:clamp(26px,3vw,42px);font-weight:600;letter-spacing:-.035em;max-width:20ch}
+.hs-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.hs-head p{max-width:34ch;font-size:14px;opacity:.75}
+.hs-head p b{display:block;opacity:1;color:var(--accent);font-size:15px;margin-top:6px}
+/* panel 1 */
+.hs-me{background:var(--mist);display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(20px,3vw,48px);align-items:stretch}
+.hs-me-txt{display:flex;flex-direction:column;gap:16px;min-width:0}
+.hs-me .lead{max-width:46ch}
+.hs-path{list-style:none;margin:0;padding:0;display:grid}
+.hs-path li{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.hs-path b{color:var(--accent);font-variant-numeric:tabular-nums}
+.hs-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:auto}
+.hs-facts div{background:var(--paper);border-radius:14px;padding:10px 12px;font-size:12px;color:var(--muted)}
+.hs-facts b{display:block;color:var(--ink);font-size:15px}
+.hs-me-ph{margin:0;border-radius:var(--r-lg);overflow:hidden;background:linear-gradient(170deg,#ff8a45 0%,var(--accent) 45%,var(--accent-deep) 100%);min-height:0}
+.hs-me-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;mix-blend-mode:multiply;filter:contrast(1.12)}
+/* panel 2 */
+.hs-crm{background:var(--ink);color:var(--on-dark)}
+.hs-crm-grid{flex:1;min-height:0;display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:12px}
+.hs-case{position:relative;border-radius:var(--r-md);overflow:hidden;background:#2a2420;min-height:0;isolation:isolate}
+.hs-case.big{grid-row:span 2}
+.hs-case img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
+.hs-case:hover img{transform:scale(1.04)}
+.hs-case.ph{background:linear-gradient(160deg,#ffcfb8,#ff8a55)}
+.hs-case.ph img{object-fit:contain;object-position:50% 10%;padding-top:10px}
+.hs-case::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(18,12,9,.92) 0%,rgba(18,12,9,.45) 45%,rgba(18,12,9,0) 75%)}
+.hs-case span{position:absolute;left:16px;right:16px;bottom:14px;font-size:12.5px;line-height:1.4;color:#d9cfc8}
+.hs-case em{display:block;font-style:normal;color:var(--accent);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.hs-case b{display:block;color:#fff;font-size:18px;letter-spacing:-.02em;margin-bottom:4px}
+.hs-case.big b{font-size:26px}
+.hs-case.big span{font-size:14px;max-width:40ch}
+/* panel 3 */
+.hs-sites{background:var(--accent);color:#fff}
+.hs-sites .eyebrow{color:#fff;opacity:.8}
+.hs-sites .hs-head p b{color:#fff}
+.hs-sites-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:10px}
+.hs-site{position:relative;border-radius:14px;overflow:hidden;background:#c94a10;text-decoration:none;min-height:0;isolation:isolate}
+.hs-site img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .5s}
+.hs-site::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(18,12,9,.8),rgba(18,12,9,0) 60%)}
+.hs-site span{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.hs-site b{font-size:13px;font-weight:600;line-height:1.2}
+.hs-site em{font-style:normal;font-size:11px;opacity:.75;white-space:nowrap}
+.hs-site:hover img{transform:scale(1.06)}
+.hs-progress{position:absolute;left:50%;bottom:18px;width:120px;height:3px;border-radius:3px;background:rgba(23,18,15,.12);transform:translateX(-50%);overflow:hidden}
+.hs-progress i{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+/* tablets and phones: plain vertical stack */
+@media (max-width:900px),(max-height:560px){
+  .hs{height:auto!important}
+  .hs-sticky{position:static;height:auto;overflow:visible;display:block;padding-block:16px}
+  .hs-track{flex-direction:column;transform:none!important;padding-inline:max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px))}
+  .hs-panel{width:auto;height:auto}
+  .hs-me{grid-template-columns:1fr}
+  .hs-me-ph{aspect-ratio:4/5;max-height:520px;order:-1}
+  .hs-head{flex-direction:column;align-items:flex-start}
+  .hs-crm-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .hs-crm-grid .hs-case{aspect-ratio:4/3}
+  .hs-case.big{grid-column:1/-1;grid-row:auto;aspect-ratio:16/10}
+  .hs-sites-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .hs-site{aspect-ratio:4/3}
+  .hs-progress{display:none}
+}
+@media (max-width:560px){.hs-crm-grid,.hs-sites-grid{grid-template-columns:1fr}.hs-facts{grid-template-columns:1fr 1fr 1fr}}
+
 /* ---------- motion ---------- */
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
 .ln>span{display:block}
@@ -550,6 +618,52 @@ html.loading,html.loading body{overflow:hidden}
   </div>
 </section>
 
+<section class="hs" id="who" aria-label="Кто я, мои CRM и сайты">
+  <div class="hs-sticky">
+    <div class="hs-track">
+
+      <article class="hs-panel hs-me" id="about">
+        <div class="hs-me-txt">
+          <span class="eyebrow">Кто я</span>
+          <h2 class="hs-h">Алексей Сухоплеска. Дизайнер, разработчик и&nbsp;предприниматель</h2>
+          <p class="lead">Соединяю опыт своего бизнеса, дизайн и нейросети, чтобы делать инструменты, которые экономят время и приносят деньги.</p>
+          <ol class="hs-path">
+            <li><b>2021</b><span>Окончил ЮУрГУ, снимал свадьбы и портреты, изучил Photoshop, свет и цвет.</span></li>
+            <li><b>2022</b><span>Открыл выездную химчистку мебели. Научился понимать боли клиентов.</span></li>
+            <li><b>2023</b><span>Год UX/UI-дизайна, затем 10+ сайтов, которые приносят заявки.</span></li>
+            <li><b>2026</b><span>Вайбкодинг: CRM для своего бизнеса, а потом и для коллег по нише.</span></li>
+          </ol>
+          <div class="hs-facts"><div>Опыт<b>3 года</b></div><div>Город<b>Калининград</b></div><div>Ищу<b>Команду</b></div></div>
+        </div>
+        <figure class="hs-me-ph"><img src="img/face.jpg" alt="Портрет Алексея Сухоплески"></figure>
+      </article>
+
+      <article class="hs-panel hs-crm" id="cases">
+        <div class="hs-head">
+          <div><span class="eyebrow">Мои проекты · 2026</span><h2 class="hs-h">CRM для микробизнеса</h2></div>
+          <p>Системы без подписки: переходят клиенту навсегда. <b>от 19 000 ₽</b></p>
+        </div>
+        <div class="hs-crm-grid">
+          <div class="hs-case big"><img src="img/voda-monitor.jpg" alt="CRM клининг-сервиса Вода"><span><em>Клининг · главный кейс</em><b>«Вода»</b>Дашборд прибыли, заказы с повторами, клиенты с LTV, автозарплата клинеров 40%.</span></div>
+          <div class="hs-case"><img src="img/crm-monitor.jpg" alt="CRM детейлинг-студии ATS Detailing"><span><em>Детейлинг</em><b>ATS Detailing</b>Записи, финансы и акт приёмки авто со схемой кузова и подписью.</span></div>
+          <div class="hs-case"><img src="img/ga-mock.jpg" alt="CRM GlobalAuto"><span><em>Автоимпорт</em><b>GlobalAuto</b>Воронка с напоминаниями, сделки по этапам, договоры по шаблону.</span></div>
+          <div class="hs-case ph"><img src="img/w4-ph1.jpg" alt="Мини-приложение записи"><span><em>Мини-приложение</em><b>Запись для выездного мастера</b>Расписание, сводка и история клиента по телефону.</span></div>
+        </div>
+      </article>
+
+      <article class="hs-panel hs-sites" id="sites">
+        <div class="hs-head">
+          <div><span class="eyebrow">Мои сайты · 2024–2025</span><h2 class="hs-h">Сайты, которые приносят заявки</h2></div>
+          <p>Все с нуля: от анализа аудитории до домена и базового SEO. <b>от 25 000 ₽</b></p>
+        </div>
+        <div class="hs-sites-grid"><a class="hs-site" href="https://cleaning-voda.ru/" target="_blank" rel="noopener"><img src="img/site1.jpg" alt="Сайт: Клининг «ВОДА»" loading="lazy"><span><b>Клининг «ВОДА»</b><em>cleaning-voda.ru</em></span></a><a class="hs-site" href="https://frogff.ru/" target="_blank" rel="noopener"><img src="img/site2.jpg" alt="Сайт: Фулфилмент Frog" loading="lazy"><span><b>Фулфилмент Frog</b><em>frogff.ru</em></span></a><a class="hs-site" href="https://akademiki74.ru/" target="_blank" rel="noopener"><img src="img/site3.jpg" alt="Сайт: Футбольная школа «Академики»" loading="lazy"><span><b>Футбольная школа «Академики»</b><em>akademiki74.ru</em></span></a><a class="hs-site" href="https://nevolyashka74.ru/" target="_blank" rel="noopener"><img src="img/site4.jpg" alt="Сайт: Лезвия «Неволяшка»" loading="lazy"><span><b>Лезвия «Неволяшка»</b><em>nevolyashka74.ru</em></span></a><a class="hs-site" href="https://clean-prime.ru/" target="_blank" rel="noopener"><img src="img/site5.jpg" alt="Сайт: Клининг «Центр Чистоты»" loading="lazy"><span><b>Клининг «Центр Чистоты»</b><em>clean-prime.ru</em></span></a><a class="hs-site" href="https://uborka-72.ru/" target="_blank" rel="noopener"><img src="img/site6.jpg" alt="Сайт: Клининг «Кристалл Clean»" loading="lazy"><span><b>Клининг «Кристалл Clean»</b><em>uborka-72.ru</em></span></a><a class="hs-site" href="https://advokatvia.ru/" target="_blank" rel="noopener"><img src="img/site7.jpg" alt="Сайт: Адвокат Ворухайло" loading="lazy"><span><b>Адвокат Ворухайло</b><em>advokatvia.ru</em></span></a><a class="hs-site" href="https://kaluginvadim.ru/" target="_blank" rel="noopener"><img src="img/site8.jpg" alt="Сайт: Группа «Холодный костёр»" loading="lazy"><span><b>Группа «Холодный костёр»</b><em>kaluginvadim.ru</em></span></a><a class="hs-site" href="https://s1-ceramic.ru/" target="_blank" rel="noopener"><img src="img/site9.jpg" alt="Сайт: Детейлинг S1 Ceramic" loading="lazy"><span><b>Детейлинг S1 Ceramic</b><em>s1-ceramic.ru</em></span></a></div>
+      </article>
+
+    </div>
+    <div class="hs-progress" aria-hidden="true"><i></i></div>
+  </div>
+</section>
+
 <section class="sec wrap" id="services" aria-labelledby="svc-h" style="padding-top:0">
   <div class="head">
     <div>
@@ -646,77 +760,6 @@ html.loading,html.loading body{overflow:hidden}
   </section>
 </div>
 
-<section class="sec wrap" id="cases" aria-labelledby="cs-h">
-  <div class="head">
-    <div>
-      <span class="eyebrow">Кейсы 2026</span>
-      <h2 class="h2" id="cs-h">Веб-приложения, которые уже работают</h2>
-    </div>
-    <p class="lead">По каждому проекту рассказываю, какая была задача, что я сделал и почему выбрал такое решение.</p>
-  </div>
-  <div class="cases">
-    <article class="case main">
-      <div class="pic"><img src="img/voda-monitor.jpg" alt="CRM клининг-сервиса Вода"></div>
-      <div>
-        <div class="meta"><span>CRM для клининга</span><em>· 2026</em><b class="tag-main">Главный кейс</b></div>
-        <h3>Клининг-сервис «Вода»</h3>
-        <p>Компания переросла запись в телефоне, переписки и Excel. Теперь расписание, клиенты и все цифры в одном окне, а зарплата клинеров считается сама.</p>
-        <div class="feats"><em>Дашборд прибыли</em><em>Заказы с повторами</em><em>Клиенты с LTV</em><em>Автозарплата 40%</em></div>
-        <a class="btn dark" href="#cases">Смотреть кейс <span class="ar" aria-hidden="true">→</span></a>
-      </div>
-    </article>
-    <article class="case">
-      <div class="pic"><img src="img/crm-monitor.jpg" alt="CRM детейлинг-студии ATS Detailing"></div>
-      <div class="meta"><span>CRM для детейлинга</span><em>· 2026</em></div>
-      <h3>ATS Detailing</h3>
-      <p>Записи, клиенты с LTV, финансы и акт приёмки авто со схемой кузова, подписью клиента и печатью.</p>
-      <a class="btn ghost" href="#cases">Смотреть <span class="ar" aria-hidden="true">→</span></a>
-    </article>
-    <article class="case">
-      <div class="pic"><img src="img/ga-mock.jpg" alt="CRM для импорта авто GlobalAuto"></div>
-      <div class="meta"><span>CRM для автоимпорта</span><em>· 2026</em></div>
-      <h3>GlobalAuto</h3>
-      <p>Воронка с напоминаниями о звонках, сделки по этапам, витрина авто, договоры по шаблону и финансы.</p>
-      <a class="btn ghost" href="#cases">Смотреть <span class="ar" aria-hidden="true">→</span></a>
-    </article>
-    <article class="case">
-      <div class="pic phone"><img src="img/w4-ph1.jpg" alt="Мини-приложение записи на телефоне"></div>
-      <div class="meta"><span>Мини-приложение</span><em>· 2026</em></div>
-      <h3>Запись для выездного специалиста</h3>
-      <p>Расписание, форма записи, сводка и вся история клиента по номеру телефона.</p>
-      <a class="btn ghost" href="#cases">Смотреть <span class="ar" aria-hidden="true">→</span></a>
-    </article>
-    <article class="case">
-      <div class="pic"><img src="img/voda-site.jpg" alt="Сайт клининговой компании Вода на ноутбуке"></div>
-      <div class="meta"><span>Ваш проект</span><em>· 2026</em></div>
-      <h3>Здесь может быть ваша CRM</h3>
-      <p>Покажу демо на примере «Воды» и соберу систему под ваши процессы. Первый месяц можно пользоваться бесплатно.</p>
-      <a class="btn orange" href="https://t.me/ialexrd" target="_blank" rel="noopener">Хочу демо <span class="ar" aria-hidden="true">→</span></a>
-    </article>
-  </div>
-</section>
-
-<section class="sec wrap" id="sites" aria-labelledby="st-h" style="padding-top:0">
-  <div class="head">
-    <div>
-      <span class="eyebrow">Сайты 2024–2025</span>
-      <h2 class="h2" id="st-h">Сайты и проекты для клиентов</h2>
-    </div>
-    <p class="lead">Все с нуля: от анализа аудитории до подключения домена и базового SEO. Все работают и выполняют свои задачи.</p>
-  </div>
-  <div class="sites">
-    <a class="site" href="https://cleaning-voda.ru/" target="_blank" rel="noopener"><span class="cat">Клининг</span><span class="nm"><b>Клининговая компания «ВОДА»</b><span class="dom">cleaning-voda.ru</span></span><span class="yr">2025</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://s1-ceramic.ru/" target="_blank" rel="noopener"><span class="cat">Детейлинг</span><span class="nm"><b>Детейлинг-центр S1 Ceramic</b><span class="dom">s1-ceramic.ru</span></span><span class="yr">2025</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://clean-prime.ru/" target="_blank" rel="noopener"><span class="cat">Клининг</span><span class="nm"><b>Клининговая компания «Центр Чистоты»</b><span class="dom">clean-prime.ru</span></span><span class="yr">2025</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://uborka-72.ru/" target="_blank" rel="noopener"><span class="cat">Клининг</span><span class="nm"><b>Клининговая компания «Кристалл Clean»</b><span class="dom">uborka-72.ru</span></span><span class="yr">2025</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://frogff.ru/" target="_blank" rel="noopener"><span class="cat">Фулфилмент</span><span class="nm"><b>Frog FulFillment</b><span class="dom">frogff.ru</span></span><span class="yr">2024</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://akademiki74.ru/" target="_blank" rel="noopener"><span class="cat">Спорт</span><span class="nm"><b>Детская футбольная школа «Академики»</b><span class="dom">akademiki74.ru</span></span><span class="yr">2024</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://nevolyashka74.ru/" target="_blank" rel="noopener"><span class="cat">Производство</span><span class="nm"><b>Лезвия для коньков «Неволяшка»</b><span class="dom">nevolyashka74.ru</span></span><span class="yr">2024</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://advokatvia.ru/" target="_blank" rel="noopener"><span class="cat">Юристы</span><span class="nm"><b>Адвокат Ворухайло И. А.</b><span class="dom">advokatvia.ru</span></span><span class="yr">2024</span><span class="go" aria-hidden="true">→</span></a>
-    <a class="site" href="https://kaluginvadim.ru/" target="_blank" rel="noopener"><span class="cat">Музыка</span><span class="nm"><b>Группа «Холодный костёр»</b><span class="dom">kaluginvadim.ru</span></span><span class="yr">2024</span><span class="go" aria-hidden="true">→</span></a>
-  </div>
-</section>
-
 <section class="sec wrap" id="process" aria-labelledby="pc-h" style="padding-top:0">
   <div class="head">
     <div>
@@ -731,31 +774,6 @@ html.loading,html.loading body{overflow:hidden}
     <div class="step"><span class="no">03</span><h3>Дизайн</h3><p>Строю дизайн-систему в Figma и дорабатываю макеты с нейросетями.</p><div class="tools"><em>Figma</em><em>Нейросети</em></div></div>
     <div class="step"><span class="no">04</span><h3>Разработка</h3><p>Пишу код и проверяю на телефоне и компьютере.</p><div class="tools"><em>VS Code</em><em>Claude Code</em></div></div>
     <div class="step"><span class="no">05</span><h3>Запуск</h3><p>Публикую проект и беру на себя техническую поддержку.</p><div class="tools"><em>Релиз</em><em>Поддержка</em></div></div>
-  </div>
-</section>
-
-<section class="sec wrap" id="about" aria-labelledby="ab-h" style="padding-top:0">
-  <div class="about">
-    <div>
-      <span class="eyebrow">Обо мне</span>
-      <h2 class="h2" id="ab-h">Дизайнер. Разработчик. Предприниматель.</h2>
-      <p class="lead">Соединяю опыт своего бизнеса, дизайн и нейросети, чтобы делать инструменты, которые экономят время и приносят деньги.</p>
-      <ol class="timeline">
-        <li><span class="y">2021</span><div><b>Учёба и фотография</b><p>Окончил ЮУрГУ, занялся коммерческой съёмкой. Изучил Photoshop, свет и цвет.</p></div></li>
-        <li><span class="y">2022</span><div><b>Своё дело</b><p>Открыл выездную химчистку мягкой мебели. Научился работать с клиентами и понимать их боли.</p></div></li>
-        <li><span class="y">2023</span><div><b>UX/UI-дизайн</b><p>Годовой курс, а с 2024 больше 10 сайтов, которые приносят заказчикам заявки.</p></div></li>
-        <li><span class="y">2026</span><div><b>Вайбкодинг</b><p>Сделал CRM для своего бизнеса и увидел, какие проблемы коллег по нише она решает.</p></div></li>
-      </ol>
-      <a class="btn dark" href="https://t.me/ialexrd" target="_blank" rel="noopener">Познакомиться <span class="ar" aria-hidden="true">→</span></a>
-    </div>
-    <div class="portrait">
-      <img src="img/face.jpg" alt="Портрет Алексея Сухоплески">
-      <div class="facts">
-        <div>Опыт<b>3 года</b></div>
-        <div>Город<b>Калининград</b></div>
-        <div>Ищу<b>Команду</b></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -827,6 +845,33 @@ html.loading,html.loading body{overflow:hidden}
       document.querySelectorAll('.lang button').forEach(function(x){x.setAttribute('aria-pressed',String(x===btn))});
     });
   });
+  // "who I am": vertical scroll drives the horizontal track
+  var hs=document.querySelector('.hs'), track=hs&&hs.querySelector('.hs-track'), hsBar=hs&&hs.querySelector('.hs-progress i'), hsMax=0;
+  function hsOn(){return window.innerWidth>900&&window.innerHeight>560}
+  function hsSize(){
+    if(!hs) return;
+    if(!hsOn()){hs.style.height='';track.style.transform='';hsMax=0;return}
+    hsMax=Math.max(0,track.scrollWidth-window.innerWidth);
+    hs.style.height=(window.innerHeight+hsMax)+'px';
+  }
+  function hsMove(){
+    if(!hs||!hsMax) return;
+    var top=hs.getBoundingClientRect().top;
+    var p=Math.max(0,Math.min(1,-top/hsMax));
+    track.style.transform='translate3d('+(-p*hsMax).toFixed(1)+'px,0,0)';
+    if(hsBar) hsBar.style.transform='scaleX('+p.toFixed(3)+')';
+  }
+  // anchor inside the track: scroll to the point where that panel is in view
+  window.hsTarget=function(el){
+    if(!hs||!hsMax||!track.contains(el)) return null;
+    var x=Math.min(hsMax,el.offsetLeft-parseFloat(getComputedStyle(track).paddingLeft));
+    return hs.getBoundingClientRect().top+window.scrollY+x;
+  };
+  hsSize(); hsMove();
+  window.addEventListener('resize',function(){hsSize();hsMove()});
+  window.addEventListener('load',function(){hsSize();hsMove()});
+  window.addEventListener('scroll',hsMove,{passive:true});
+
   // hero intro starts when the preloader leaves
   var started=false;
   function start(){if(!started){started=true;requestAnimationFrame(function(){root.classList.add('ready')})}}
@@ -950,7 +995,8 @@ html.loading,html.loading body{overflow:hidden}
         var id=a.getAttribute('href'), el=id.length>1?document.querySelector(id):null;
         if(id!=='#top'&&!el) return;
         e.preventDefault();
-        go(el&&id!=='#top'?el.getBoundingClientRect().top+window.scrollY-16:0);
+        var hy=el&&window.hsTarget?window.hsTarget(el):null;
+        go(hy!=null?hy:el&&id!=='#top'?el.getBoundingClientRect().top+window.scrollY-16:0);
       });
     });
   }
