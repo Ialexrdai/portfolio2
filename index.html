@@ -434,73 +434,35 @@ footer{font-size:13px}
 html.loading,html.loading body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pre{display:none}}
 
-/* ---------- who I am: horizontal scroll ---------- */
-.hs{position:relative}
-.hs-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center}
-.hs-track{display:flex;gap:16px;padding-inline:max(10px,env(safe-area-inset-left,0px));will-change:transform}
-.hs-panel{flex:none;width:min(1240px,calc(100vw - 80px));height:min(760px,calc(100svh - 40px));border-radius:var(--r-xl);overflow:hidden;position:relative;padding:clamp(24px,3vw,44px);display:flex;flex-direction:column;gap:20px}
-.hs-h{font-size:clamp(26px,3vw,42px);font-weight:600;letter-spacing:-.035em;max-width:20ch}
-.hs-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
-.hs-head p{max-width:34ch;font-size:14px;opacity:.75}
-.hs-head p b{display:block;opacity:1;color:var(--accent);font-size:15px;margin-top:6px}
-/* panel 1 */
-.hs-me{background:var(--mist);display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(20px,3vw,48px);align-items:stretch}
-.hs-me-txt{display:flex;flex-direction:column;gap:16px;min-width:0}
-.hs-me .lead{max-width:46ch}
-.hs-path{list-style:none;margin:0;padding:0;display:grid}
-.hs-path li{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
-.hs-path b{color:var(--accent);font-variant-numeric:tabular-nums}
-.hs-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:auto}
-.hs-facts div{background:var(--paper);border-radius:14px;padding:10px 12px;font-size:12px;color:var(--muted)}
-.hs-facts b{display:block;color:var(--ink);font-size:15px}
-.hs-me-ph{margin:0;border-radius:var(--r-lg);overflow:hidden;background:linear-gradient(170deg,#ff8a45 0%,var(--accent) 45%,var(--accent-deep) 100%);min-height:0}
-.hs-me-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;mix-blend-mode:multiply;filter:contrast(1.12)}
-/* panel 2 */
-.hs-crm{background:var(--ink);color:var(--on-dark)}
-.hs-crm-grid{flex:1;min-height:0;display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:12px}
-.hs-case{position:relative;border-radius:var(--r-md);overflow:hidden;background:#2a2420;min-height:0;isolation:isolate}
-.hs-case.big{grid-row:span 2}
-.hs-case img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
-.hs-case:hover img{transform:scale(1.04)}
-.hs-case.ph{background:linear-gradient(160deg,#ffcfb8,#ff8a55)}
-.hs-case.ph img{object-fit:contain;object-position:50% 10%;padding-top:10px}
-.hs-case::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(18,12,9,.92) 0%,rgba(18,12,9,.45) 45%,rgba(18,12,9,0) 75%)}
-.hs-case span{position:absolute;left:16px;right:16px;bottom:14px;font-size:12.5px;line-height:1.4;color:#d9cfc8}
-.hs-case em{display:block;font-style:normal;color:var(--accent);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.hs-case b{display:block;color:#fff;font-size:18px;letter-spacing:-.02em;margin-bottom:4px}
-.hs-case.big b{font-size:26px}
-.hs-case.big span{font-size:14px;max-width:40ch}
-/* panel 3 */
-.hs-sites{background:var(--accent);color:#fff}
-.hs-sites .eyebrow{color:#fff;opacity:.8}
-.hs-sites .hs-head p b{color:#fff}
-.hs-sites-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:10px}
-.hs-site{position:relative;border-radius:14px;overflow:hidden;background:#c94a10;text-decoration:none;min-height:0;isolation:isolate}
-.hs-site img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .5s}
-.hs-site::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(18,12,9,.8),rgba(18,12,9,0) 60%)}
-.hs-site span{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
-.hs-site b{font-size:13px;font-weight:600;line-height:1.2}
-.hs-site em{font-style:normal;font-size:11px;opacity:.75;white-space:nowrap}
-.hs-site:hover img{transform:scale(1.06)}
-.hs-progress{position:absolute;left:50%;bottom:18px;width:120px;height:3px;border-radius:3px;background:rgba(23,18,15,.12);transform:translateX(-50%);overflow:hidden}
-.hs-progress i{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
-/* tablets and phones: plain vertical stack */
-@media (max-width:900px),(max-height:560px){
-  .hs{height:auto!important}
-  .hs-sticky{position:static;height:auto;overflow:visible;display:block;padding-block:16px}
-  .hs-track{flex-direction:column;transform:none!important;padding-inline:max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px))}
-  .hs-panel{width:auto;height:auto}
-  .hs-me{grid-template-columns:1fr}
-  .hs-me-ph{aspect-ratio:4/5;max-height:520px;order:-1}
-  .hs-head{flex-direction:column;align-items:flex-start}
-  .hs-crm-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-  .hs-crm-grid .hs-case{aspect-ratio:4/3}
-  .hs-case.big{grid-column:1/-1;grid-row:auto;aspect-ratio:16/10}
-  .hs-sites-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-  .hs-site{aspect-ratio:4/3}
-  .hs-progress{display:none}
+/* ---------- tasks heading + scroll gradient ---------- */
+.tasks{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:stretch}
+.tasks-h{font-size:clamp(28px,3.6vw,54px);font-weight:500;letter-spacing:-.035em;line-height:1}
+.tasks-h .l2{padding-left:1.6em}
+.tasks-h .ln{white-space:nowrap}
+@media (max-width:480px){.tasks-h .ln{white-space:normal}}
+.tasks-sub{margin-top:18px;font-size:clamp(15px,1.4vw,20px);font-weight:500;letter-spacing:-.01em;color:#b9b0a9}
+.tasks-intro{margin-top:28px;margin-left:auto;max-width:34ch;font-size:14px;color:var(--muted)}
+.tasks-txt{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.tasks-grad{--p:0;position:relative;border-radius:var(--r-xl);overflow:hidden;min-height:340px;isolation:isolate;
+  background:
+    radial-gradient(55% 60% at calc(18% + var(--p)*64%) calc(25% + var(--p)*45%),#ff7a2e 0%,rgba(255,122,46,0) 70%),
+    radial-gradient(50% 55% at calc(85% - var(--p)*55%) calc(85% - var(--p)*30%),#c43d06 0%,rgba(196,61,6,0) 72%),
+    radial-gradient(38% 40% at calc(60% - var(--p)*30%) calc(10% + var(--p)*75%),#ffd9c2 0%,rgba(255,217,194,0) 70%),
+    radial-gradient(45% 45% at calc(10% + var(--p)*20%) calc(90% - var(--p)*60%),#4a1806 0%,rgba(74,24,6,0) 75%),
+    #17120f;
+  filter:hue-rotate(calc(var(--p)*-18deg)) saturate(calc(1 + var(--p)*.2))}
+.tasks-grad i{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/140px 140px;mix-blend-mode:overlay;opacity:.35}
+@media (max-width:860px){.tasks{grid-template-columns:1fr}.tasks-grad{min-height:240px}.tasks-intro{margin-left:0}.tasks-h .l2{padding-left:1em}}
+@media (prefers-reduced-motion:no-preference){
+  .js .tasks .ln>span{display:block;transform:translateY(110%);transition:transform 1s cubic-bezier(.2,.8,.1,1)}
+  .js .tasks.seen .ln>span{transform:none}
+  .js .tasks.seen .l2>span{transition-delay:.12s}
+  .js .tasks.seen .tasks-sub .ln>span{transition-delay:.26s}
+  .js .tasks .tasks-intro{opacity:.001;transform:translateY(16px);transition:opacity .8s .4s,transform .8s .4s cubic-bezier(.2,.8,.1,1)}
+  .js .tasks.seen .tasks-intro{opacity:1;transform:none}
+  .js .tasks .tasks-grad{opacity:.001;transform:scale(.96);transition:opacity 1s .15s,transform 1.2s .15s cubic-bezier(.2,.8,.1,1)}
+  .js .tasks.seen .tasks-grad{opacity:1;transform:none}
 }
-@media (max-width:560px){.hs-crm-grid,.hs-sites-grid{grid-template-columns:1fr}.hs-facts{grid-template-columns:1fr 1fr 1fr}}
 
 /* ---------- motion ---------- */
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
@@ -576,8 +538,6 @@ html.loading,html.loading body{overflow:hidden}
         <li><a href="#services">Услуги</a></li>
         <li><a href="#prices">Цены</a></li>
         <li><a href="#cases">Кейсы</a></li>
-        <li><a href="#sites">Сайты</a></li>
-        <li><a href="#about">Обо мне</a></li>
       </ul>
       </div>
       <div class="lang" role="group" aria-label="Язык сайта"><button type="button" id="lang-ru" aria-pressed="true">RU</button><button type="button" id="lang-en" aria-pressed="false">EN</button></div>
@@ -618,50 +578,13 @@ html.loading,html.loading body{overflow:hidden}
   </div>
 </section>
 
-<section class="hs" id="who" aria-label="Кто я, мои CRM и сайты">
-  <div class="hs-sticky">
-    <div class="hs-track">
-
-      <article class="hs-panel hs-me" id="about">
-        <div class="hs-me-txt">
-          <span class="eyebrow">Кто я</span>
-          <h2 class="hs-h">Алексей Сухоплеска. Дизайнер, разработчик и&nbsp;предприниматель</h2>
-          <p class="lead">Соединяю опыт своего бизнеса, дизайн и нейросети, чтобы делать инструменты, которые экономят время и приносят деньги.</p>
-          <ol class="hs-path">
-            <li><b>2021</b><span>Окончил ЮУрГУ, снимал свадьбы и портреты, изучил Photoshop, свет и цвет.</span></li>
-            <li><b>2022</b><span>Открыл выездную химчистку мебели. Научился понимать боли клиентов.</span></li>
-            <li><b>2023</b><span>Год UX/UI-дизайна, затем 10+ сайтов, которые приносят заявки.</span></li>
-            <li><b>2026</b><span>Вайбкодинг: CRM для своего бизнеса, а потом и для коллег по нише.</span></li>
-          </ol>
-          <div class="hs-facts"><div>Опыт<b>3 года</b></div><div>Город<b>Калининград</b></div><div>Ищу<b>Команду</b></div></div>
-        </div>
-        <figure class="hs-me-ph"><img src="img/face.jpg" alt="Портрет Алексея Сухоплески"></figure>
-      </article>
-
-      <article class="hs-panel hs-crm" id="cases">
-        <div class="hs-head">
-          <div><span class="eyebrow">Мои проекты · 2026</span><h2 class="hs-h">CRM для микробизнеса</h2></div>
-          <p>Системы без подписки: переходят клиенту навсегда. <b>от 19 000 ₽</b></p>
-        </div>
-        <div class="hs-crm-grid">
-          <div class="hs-case big"><img src="img/voda-monitor.jpg" alt="CRM клининг-сервиса Вода"><span><em>Клининг · главный кейс</em><b>«Вода»</b>Дашборд прибыли, заказы с повторами, клиенты с LTV, автозарплата клинеров 40%.</span></div>
-          <div class="hs-case"><img src="img/crm-monitor.jpg" alt="CRM детейлинг-студии ATS Detailing"><span><em>Детейлинг</em><b>ATS Detailing</b>Записи, финансы и акт приёмки авто со схемой кузова и подписью.</span></div>
-          <div class="hs-case"><img src="img/ga-mock.jpg" alt="CRM GlobalAuto"><span><em>Автоимпорт</em><b>GlobalAuto</b>Воронка с напоминаниями, сделки по этапам, договоры по шаблону.</span></div>
-          <div class="hs-case ph"><img src="img/w4-ph1.jpg" alt="Мини-приложение записи"><span><em>Мини-приложение</em><b>Запись для выездного мастера</b>Расписание, сводка и история клиента по телефону.</span></div>
-        </div>
-      </article>
-
-      <article class="hs-panel hs-sites" id="sites">
-        <div class="hs-head">
-          <div><span class="eyebrow">Мои сайты · 2024–2025</span><h2 class="hs-h">Сайты, которые приносят заявки</h2></div>
-          <p>Все с нуля: от анализа аудитории до домена и базового SEO. <b>от 25 000 ₽</b></p>
-        </div>
-        <div class="hs-sites-grid"><a class="hs-site" href="https://cleaning-voda.ru/" target="_blank" rel="noopener"><img src="img/site1.jpg" alt="Сайт: Клининг «ВОДА»" loading="lazy"><span><b>Клининг «ВОДА»</b><em>cleaning-voda.ru</em></span></a><a class="hs-site" href="https://frogff.ru/" target="_blank" rel="noopener"><img src="img/site2.jpg" alt="Сайт: Фулфилмент Frog" loading="lazy"><span><b>Фулфилмент Frog</b><em>frogff.ru</em></span></a><a class="hs-site" href="https://akademiki74.ru/" target="_blank" rel="noopener"><img src="img/site3.jpg" alt="Сайт: Футбольная школа «Академики»" loading="lazy"><span><b>Футбольная школа «Академики»</b><em>akademiki74.ru</em></span></a><a class="hs-site" href="https://nevolyashka74.ru/" target="_blank" rel="noopener"><img src="img/site4.jpg" alt="Сайт: Лезвия «Неволяшка»" loading="lazy"><span><b>Лезвия «Неволяшка»</b><em>nevolyashka74.ru</em></span></a><a class="hs-site" href="https://clean-prime.ru/" target="_blank" rel="noopener"><img src="img/site5.jpg" alt="Сайт: Клининг «Центр Чистоты»" loading="lazy"><span><b>Клининг «Центр Чистоты»</b><em>clean-prime.ru</em></span></a><a class="hs-site" href="https://uborka-72.ru/" target="_blank" rel="noopener"><img src="img/site6.jpg" alt="Сайт: Клининг «Кристалл Clean»" loading="lazy"><span><b>Клининг «Кристалл Clean»</b><em>uborka-72.ru</em></span></a><a class="hs-site" href="https://advokatvia.ru/" target="_blank" rel="noopener"><img src="img/site7.jpg" alt="Сайт: Адвокат Ворухайло" loading="lazy"><span><b>Адвокат Ворухайло</b><em>advokatvia.ru</em></span></a><a class="hs-site" href="https://kaluginvadim.ru/" target="_blank" rel="noopener"><img src="img/site8.jpg" alt="Сайт: Группа «Холодный костёр»" loading="lazy"><span><b>Группа «Холодный костёр»</b><em>kaluginvadim.ru</em></span></a><a class="hs-site" href="https://s1-ceramic.ru/" target="_blank" rel="noopener"><img src="img/site9.jpg" alt="Сайт: Детейлинг S1 Ceramic" loading="lazy"><span><b>Детейлинг S1 Ceramic</b><em>s1-ceramic.ru</em></span></a></div>
-      </article>
-
-    </div>
-    <div class="hs-progress" aria-hidden="true"><i></i></div>
+<section class="sec wrap tasks" id="cases" aria-labelledby="ts-h">
+  <div class="tasks-txt">
+    <h2 class="tasks-h" id="ts-h"><span class="ln"><span>Задачи, которые</span></span><span class="ln l2"><span>я решал для клиентов</span></span></h2>
+    <p class="tasks-sub"><span class="ln"><span>Реализованные проекты</span></span></p>
+    <p class="tasks-intro">По каждому проекту коротко рассказываю, какая стояла задача, что я сделал и почему выбрал именно такое решение.</p>
   </div>
+  <div class="tasks-grad" aria-hidden="true"><i></i></div>
 </section>
 
 <section class="sec wrap" id="services" aria-labelledby="svc-h" style="padding-top:0">
@@ -845,33 +768,6 @@ html.loading,html.loading body{overflow:hidden}
       document.querySelectorAll('.lang button').forEach(function(x){x.setAttribute('aria-pressed',String(x===btn))});
     });
   });
-  // "who I am": vertical scroll drives the horizontal track
-  var hs=document.querySelector('.hs'), track=hs&&hs.querySelector('.hs-track'), hsBar=hs&&hs.querySelector('.hs-progress i'), hsMax=0;
-  function hsOn(){return window.innerWidth>900&&window.innerHeight>560}
-  function hsSize(){
-    if(!hs) return;
-    if(!hsOn()){hs.style.height='';track.style.transform='';hsMax=0;return}
-    hsMax=Math.max(0,track.scrollWidth-window.innerWidth);
-    hs.style.height=(window.innerHeight+hsMax)+'px';
-  }
-  function hsMove(){
-    if(!hs||!hsMax) return;
-    var top=hs.getBoundingClientRect().top;
-    var p=Math.max(0,Math.min(1,-top/hsMax));
-    track.style.transform='translate3d('+(-p*hsMax).toFixed(1)+'px,0,0)';
-    if(hsBar) hsBar.style.transform='scaleX('+p.toFixed(3)+')';
-  }
-  // anchor inside the track: scroll to the point where that panel is in view
-  window.hsTarget=function(el){
-    if(!hs||!hsMax||!track.contains(el)) return null;
-    var x=Math.min(hsMax,el.offsetLeft-parseFloat(getComputedStyle(track).paddingLeft));
-    return hs.getBoundingClientRect().top+window.scrollY+x;
-  };
-  hsSize(); hsMove();
-  window.addEventListener('resize',function(){hsSize();hsMove()});
-  window.addEventListener('load',function(){hsSize();hsMove()});
-  window.addEventListener('scroll',hsMove,{passive:true});
-
   // hero intro starts when the preloader leaves
   var started=false;
   function start(){if(!started){started=true;requestAnimationFrame(function(){root.classList.add('ready')})}}
@@ -966,7 +862,7 @@ html.loading,html.loading body{overflow:hidden}
   var io=new IntersectionObserver(function(es){
     es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('seen');io.unobserve(e.target)}});
   },{threshold:.18});
-  document.querySelectorAll('#skills,.skills').forEach(function(el){io.observe(el)});
+  document.querySelectorAll('#skills,.skills,.tasks').forEach(function(el){io.observe(el)});
 
   // smooth wheel scrolling on desktop
   var fine=window.matchMedia('(pointer: fine)').matches;
@@ -995,14 +891,14 @@ html.loading,html.loading body{overflow:hidden}
         var id=a.getAttribute('href'), el=id.length>1?document.querySelector(id):null;
         if(id!=='#top'&&!el) return;
         e.preventDefault();
-        var hy=el&&window.hsTarget?window.hsTarget(el):null;
-        go(hy!=null?hy:el&&id!=='#top'?el.getBoundingClientRect().top+window.scrollY-16:0);
+        go(el&&id!=='#top'?el.getBoundingClientRect().top+window.scrollY-16:0);
       });
     });
   }
 
   // scroll-linked: statement words light up, hero photo drifts
   var ph=document.querySelector('.hero-ph'), ticking=false;
+  var grad=document.querySelector('.tasks-grad');
   var sk=document.querySelector('.skills'), skCards=sk?sk.children:[], skOff=[170,60,250,110];
   function frame(){
     ticking=false;
@@ -1012,6 +908,11 @@ html.loading,html.loading body{overflow:hidden}
       var p=(vh*0.9-r.top)/(r.height+vh*0.4);
       var n=Math.round(Math.max(0,Math.min(1,p))*words.length);
       for(var i=0;i<words.length;i++) words[i].classList.toggle('on',i<n);
+    }
+    if(grad){
+      var gr=grad.getBoundingClientRect();
+      var gp=Math.max(0,Math.min(1,(vh-gr.top)/(vh+gr.height)));
+      grad.style.setProperty('--p',gp.toFixed(3));
     }
     if(ph&&window.scrollY<vh*1.2) ph.style.translate='0 '+(window.scrollY*0.18).toFixed(1)+'px';
     // skill cards: start at different heights, meet when the row reaches the middle of the screen
