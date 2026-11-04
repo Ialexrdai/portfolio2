@@ -439,11 +439,12 @@ html.loading,html.loading body{overflow:hidden}
 .tasks{position:relative;height:260vh}
 .tasks-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:visible;overflow-x:clip;display:flex;align-items:center}
 .tasks-in{position:relative;z-index:1;width:100%}
-.tasks-h{font-size:clamp(30px,4.4vw,68px);font-weight:500;letter-spacing:-.04em;line-height:1;color:var(--on-dark);max-width:62%}
-.tasks-h .ln,.tasks-sub .ln{display:block;overflow:hidden;padding-bottom:.08em}
+.tasks-h{font-size:clamp(30px,4.4vw,68px);font-weight:500;word-spacing:.02em;letter-spacing:-.04em;line-height:1;color:var(--on-dark);max-width:62%}
+.tasks-h .ln,.tasks-sub .ln{display:block}
+.tw{display:inline-block;transform-origin:left center;will-change:transform,filter,opacity}
 .tasks-h .l2{padding-left:1.6em;white-space:nowrap}
 .tasks-h .ln:first-child{white-space:nowrap}
-.rv{display:inline-block;will-change:transform}
+.rv{display:inline}
 .tasks-sub{margin-top:20px;font-size:clamp(15px,1.5vw,22px);font-weight:500;letter-spacing:-.01em;color:#8a817a}
 .tasks-intro{margin-top:32px;margin-left:clamp(0px,24vw,360px);max-width:34ch;font-size:14px;color:#b9aea6}
 .tasks-glow{--p:0;position:absolute;inset:-30vh 0;pointer-events:none}
@@ -901,7 +902,17 @@ html.loading,html.loading body{overflow:hidden}
 
   // scroll-linked: statement words light up, hero photo drifts
   var ph=document.querySelector('.hero-ph'), ticking=false;
-  var ts=document.querySelector('.tasks'), bgf=document.querySelector('.bgfade'), glow=ts&&ts.querySelector('.tasks-glow'), rv=ts?ts.querySelectorAll('.rv'):[], tin=ts&&ts.querySelector('.tasks-in');
+  var ts=document.querySelector('.tasks'), bgf=document.querySelector('.bgfade'), glow=ts&&ts.querySelector('.tasks-glow'), tin=ts&&ts.querySelector('.tasks-in'), tw=[];
+  if(tin){
+    tin.querySelectorAll('.rv').forEach(function(el){
+      var parts=el.textContent.split(/(\s+)/);el.textContent='';
+      parts.forEach(function(w){
+        if(!w) return;
+        if(/^\s+$/.test(w)){el.appendChild(document.createTextNode(w));return}
+        var s=document.createElement('span');s.className='tw';s.textContent=w;el.appendChild(s);tw.push(s);
+      });
+    });
+  }
   var sk=document.querySelector('.skills'), skCards=sk?sk.children:[], skOff=[170,60,250,110];
   function frame(){
     ticking=false;
@@ -922,12 +933,14 @@ html.loading,html.loading body{overflow:hidden}
       glow.style.opacity=dark.toFixed(3);
       tin.style.opacity=(1-out).toFixed(3);
       glow.style.setProperty('--p',cl((vh-tr.top)/(vh+tr.height)).toFixed(3));
-      // text lines rise one by one, tied to the scroll position
-      var q=cl((vh*0.15-tr.top)/(vh*0.15+pin*0.6));
-      for(var k=0;k<rv.length;k++){
-        var t=sm((q-k*0.16)/0.36);
-        rv[k].style.transform='translateY('+((1-t)*110).toFixed(1)+'%)';
-        rv[k].style.opacity=(k===3?t:1).toFixed(3);
+      // words come into focus one by one, tied to the scroll position
+      var q=cl((vh*0.2-tr.top)/(vh*0.2+pin*0.6)), N=tw.length, span=5;
+      for(var k=0;k<N;k++){
+        var t=sm((q*(N+span)-k)/span), u=1-t;
+        var s=tw[k].style;
+        s.opacity=(0.08+t*0.92).toFixed(3);
+        s.filter=u>0.01?'blur('+(u*9).toFixed(1)+'px)':'none';
+        s.transform=u>0.01?'translateX('+(u*28).toFixed(1)+'px) scaleX('+(1+u*0.18).toFixed(3)+')':'none';
       }
     }
     if(ph&&window.scrollY<vh*1.2) ph.style.translate='0 '+(window.scrollY*0.18).toFixed(1)+'px';
