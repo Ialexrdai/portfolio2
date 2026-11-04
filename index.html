@@ -435,9 +435,9 @@ html.loading,html.loading body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pre{display:none}}
 
 /* ---------- tasks: page turns black, text and gradients follow the scroll ---------- */
-.bgfade{position:fixed;inset:0;z-index:-1;background:#0d0907;opacity:0;pointer-events:none}
+.bgfade{position:fixed;inset:-50vh 0;z-index:-1;background:#000;opacity:0;pointer-events:none}
 .tasks{position:relative;height:260vh}
-.tasks-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;align-items:center}
+.tasks-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:visible;overflow-x:clip;display:flex;align-items:center}
 .tasks-in{position:relative;z-index:1;width:100%}
 .tasks-h{font-size:clamp(30px,4.4vw,68px);font-weight:500;letter-spacing:-.04em;line-height:1;color:var(--on-dark);max-width:62%}
 .tasks-h .ln,.tasks-sub .ln{display:block;overflow:hidden;padding-bottom:.08em}
@@ -446,13 +446,12 @@ html.loading,html.loading body{overflow:hidden}
 .rv{display:inline-block;will-change:transform}
 .tasks-sub{margin-top:20px;font-size:clamp(15px,1.5vw,22px);font-weight:500;letter-spacing:-.01em;color:#8a817a}
 .tasks-intro{margin-top:32px;margin-left:clamp(0px,24vw,360px);max-width:34ch;font-size:14px;color:#b9aea6}
-.tasks-glow{--p:0;position:absolute;inset:0;pointer-events:none}
+.tasks-glow{--p:0;position:absolute;inset:-30vh 0;pointer-events:none}
 .tasks-glow i{position:absolute;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;will-change:transform}
 .tasks-glow .g1{width:62vw;height:62vw;max-width:980px;max-height:980px;right:-14vw;top:-18vh;background:radial-gradient(circle,#ff7a2e 0%,rgba(255,122,46,0) 65%);transform:translate(calc(var(--p)*-18vw),calc(var(--p)*30vh)) scale(calc(.8 + var(--p)*.4))}
 .tasks-glow .g2{width:48vw;height:48vw;max-width:760px;max-height:760px;right:4vw;bottom:-22vh;background:radial-gradient(circle,#c43d06 0%,rgba(196,61,6,0) 68%);transform:translate(calc(var(--p)*-10vw),calc(var(--p)*-26vh))}
 .tasks-glow .g3{width:30vw;height:30vw;max-width:480px;max-height:480px;right:22vw;top:18vh;background:radial-gradient(circle,#ffd9c2 0%,rgba(255,217,194,0) 66%);opacity:.75;transform:translate(calc(var(--p)*20vw),calc(var(--p)*18vh)) scale(calc(1.2 - var(--p)*.5))}
 .tasks-glow .g4{width:40vw;height:40vw;max-width:640px;max-height:640px;right:-10vw;top:30vh;background:radial-gradient(circle,#ff5a14 0%,rgba(255,90,20,0) 66%);opacity:.8;transform:translate(calc(var(--p)*-24vw),calc(var(--p)*-12vh))}
-.tasks-glow b{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/140px 140px;mix-blend-mode:overlay;opacity:.22}
 .tasks-glow{opacity:0}
 @media (max-width:860px){
   .tasks-h{max-width:none}
@@ -463,7 +462,7 @@ html.loading,html.loading body{overflow:hidden}
   .tasks-glow .g2{width:90vw;height:90vw;right:-30vw}
 }
 @media (max-width:480px){.tasks-h .ln:first-child,.tasks-h .l2{white-space:normal}}
-@media (prefers-reduced-motion:reduce){.tasks{height:auto}.tasks-stick{position:relative;height:auto;padding-block:120px;background:#0d0907}.tasks-glow{opacity:1}}
+@media (prefers-reduced-motion:reduce){.tasks{height:auto}.tasks-stick{position:relative;height:auto;padding-block:120px;background:#000}.tasks-glow{opacity:1}}
 
 /* ---------- motion ---------- */
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
@@ -582,7 +581,7 @@ html.loading,html.loading body{overflow:hidden}
 <div class="bgfade" aria-hidden="true"></div>
 <section class="tasks" id="cases" aria-labelledby="ts-h">
   <div class="tasks-stick">
-    <div class="tasks-glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="g4"></i><b></b></div>
+    <div class="tasks-glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="g4"></i></div>
     <div class="wrap tasks-in">
       <h2 class="tasks-h" id="ts-h"><span class="ln"><span class="rv">Задачи, которые</span></span><span class="ln l2"><span class="rv">я решал для клиентов</span></span></h2>
       <p class="tasks-sub"><span class="ln"><span class="rv">Реализованные проекты</span></span></p>
