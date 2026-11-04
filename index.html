@@ -460,6 +460,13 @@ body{margin:8px}
 .cs p{margin-top:12px;font-size:14px;color:#9a908a;max-width:48ch}
 @media (max-width:760px){.cs-grid{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.cs{opacity:1;transform:none;transition:none}}
+/* cursor smoke + case cards shudder on hover */
+.smoke{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:60}
+.cs-pic{will-change:transform}
+.cs:hover .cs-pic{animation:csShudder .5s cubic-bezier(.3,.7,.4,1) 1}
+@keyframes csShudder{0%{transform:none}12%{transform:translate(-5px,2px) rotate(-.6deg) scale(1.012)}26%{transform:translate(4px,-2px) rotate(.5deg) scale(1.016)}40%{transform:translate(-3px,1px) rotate(-.3deg) scale(1.012)}56%{transform:translate(2px,0) rotate(.15deg) scale(1.008)}72%{transform:translate(-1px,0) scale(1.004)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.cs:hover .cs-pic{animation:none}.smoke{display:none}}
+
 
 /* ---------- motion ---------- */
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
@@ -975,6 +982,77 @@ body{margin:8px}
   window.addEventListener('scroll',req,{passive:true});
   window.addEventListener('resize',req);
   frame();
+})();
+</script>
+<canvas class="smoke" aria-hidden="true"></canvas>
+<script>
+/* Cursor smoke: a small stable-fluids simulation in WebGL. White over dark blocks, ink over light ones. */
+(function(){
+  if(!matchMedia('(pointer:fine)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv=document.querySelector('.smoke'); if(!cv) return;
+  var gl=cv.getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false,depth:false,stencil:false});
+  var isGL2=!!gl; if(!gl) gl=cv.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:false,depth:false,stencil:false});
+  if(!gl){cv.remove();return}
+  var halfType,fmtRG,fmtR,fmtRGBA,intRG,intR,intRGBA,linear=true;
+  if(isGL2){gl.getExtension('EXT_color_buffer_float');linear=!!gl.getExtension('OES_texture_float_linear')||true;halfType=gl.HALF_FLOAT;intRGBA=gl.RGBA16F;intRG=gl.RG16F;intR=gl.R16F;fmtRGBA=gl.RGBA;fmtRG=gl.RG;fmtR=gl.RED;}
+  else{var hf=gl.getExtension('OES_texture_half_float');gl.getExtension('OES_texture_half_float_linear');if(!hf){cv.remove();return}halfType=hf.HALF_FLOAT_OES;intRGBA=intRG=intR=fmtRGBA=fmtRG=fmtR=gl.RGBA;}
+  var SIM=128, DYE=512;
+  function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s}
+  var VS='precision highp float;attribute vec2 p;varying vec2 uv,vL,vR,vT,vB;uniform vec2 tx;void main(){uv=p*.5+.5;vL=uv-vec2(tx.x,0.);vR=uv+vec2(tx.x,0.);vT=uv+vec2(0.,tx.y);vB=uv-vec2(0.,tx.y);gl_Position=vec4(p,0.,1.);}';
+  var vs=sh(gl.VERTEX_SHADER,VS);
+  function prog(fs){var p=gl.createProgram();gl.attachShader(p,vs);gl.attachShader(p,sh(gl.FRAGMENT_SHADER,'precision highp float;precision highp sampler2D;varying vec2 uv,vL,vR,vT,vB;'+fs));gl.bindAttribLocation(p,0,'p');gl.linkProgram(p);
+    if(!gl.getProgramParameter(p,gl.LINK_STATUS)) return null;
+    var u={},n=gl.getProgramParameter(p,gl.ACTIVE_UNIFORMS);for(var i=0;i<n;i++){var nm=gl.getActiveUniform(p,i).name;u[nm]=gl.getUniformLocation(p,nm)}return {p:p,u:u}}
+  var P={
+    splat:prog('uniform sampler2D T;uniform float ar,r;uniform vec3 c;uniform vec2 pt;void main(){vec2 d=uv-pt;d.x*=ar;vec3 s=exp(-dot(d,d)/r)*c;gl_FragColor=vec4(texture2D(T,uv).xyz+s,1.);}'),
+    adv:prog('uniform sampler2D V,S;uniform vec2 tx;uniform float dt,dis;void main(){vec2 c=uv-dt*texture2D(V,uv).xy*tx;gl_FragColor=texture2D(S,c)/(1.+dis*dt);}'),
+    div:prog('uniform sampler2D V;void main(){float L=texture2D(V,vL).x,R=texture2D(V,vR).x,T=texture2D(V,vT).y,B=texture2D(V,vB).y;vec2 C=texture2D(V,uv).xy;if(vL.x<0.)L=-C.x;if(vR.x>1.)R=-C.x;if(vT.y>1.)T=-C.y;if(vB.y<0.)B=-C.y;gl_FragColor=vec4(.5*(R-L+T-B),0.,0.,1.);}'),
+    curl:prog('uniform sampler2D V;void main(){gl_FragColor=vec4(.5*(texture2D(V,vR).y-texture2D(V,vL).y-texture2D(V,vT).x+texture2D(V,vB).x),0.,0.,1.);}'),
+    vort:prog('uniform sampler2D V,C;uniform float k,dt;void main(){float L=texture2D(C,vL).x,R=texture2D(C,vR).x,T=texture2D(C,vT).x,B=texture2D(C,vB).x,M=texture2D(C,uv).x;vec2 f=.5*vec2(abs(T)-abs(B),abs(R)-abs(L));f/=length(f)+.0001;f*=k*M;f.y*=-1.;gl_FragColor=vec4(clamp(texture2D(V,uv).xy+f*dt,-1000.,1000.),0.,1.);}'),
+    pres:prog('uniform sampler2D Pr,D;void main(){gl_FragColor=vec4((texture2D(Pr,vL).x+texture2D(Pr,vR).x+texture2D(Pr,vB).x+texture2D(Pr,vT).x-texture2D(D,uv).x)*.25,0.,0.,1.);}'),
+    grad:prog('uniform sampler2D Pr,V;void main(){vec2 v=texture2D(V,uv).xy-vec2(texture2D(Pr,vR).x-texture2D(Pr,vL).x,texture2D(Pr,vT).x-texture2D(Pr,vB).x);gl_FragColor=vec4(v,0.,1.);}'),
+    fade:prog('uniform sampler2D T;uniform float v;void main(){gl_FragColor=v*texture2D(T,uv);}'),
+    show:prog('uniform sampler2D T;uniform vec3 col;uniform float op;void main(){float a=clamp(texture2D(T,uv).r,0.,1.);a=smoothstep(0.,1.,a)*op;gl_FragColor=vec4(col*a,a);}')
+  };
+  for(var k in P) if(!P[k]){cv.remove();return}
+  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,-1,1,1,1,1,-1]),gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array([0,1,2,0,2,3]),gl.STATIC_DRAW);
+  gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);gl.enableVertexAttribArray(0);
+  function fbo(w,h,inf,fmt,filt){gl.activeTexture(gl.TEXTURE0);var t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,filt);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,filt);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D,0,inf,w,h,0,fmt,halfType,null);var f=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,f);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,t,0);
+    gl.viewport(0,0,w,h);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+    return {t:t,f:f,w:w,h:h,tx:[1/w,1/h],bind:function(id){gl.activeTexture(gl.TEXTURE0+id);gl.bindTexture(gl.TEXTURE_2D,t);return id}}}
+  function dbl(w,h,inf,fmt,filt){var a=fbo(w,h,inf,fmt,filt),b=fbo(w,h,inf,fmt,filt);return {w:w,h:h,tx:a.tx,get r(){return a},get wr(){return b},swap:function(){var t=a;a=b;b=t}}}
+  function res(n){var ar=innerWidth/innerHeight;return ar<1?{w:n,h:Math.round(n/ar)}:{w:Math.round(n*ar),h:n}}
+  var vel,dye,dvg,crl,prs;
+  function init(){var s=res(SIM),d=res(DYE),L=gl.LINEAR,N=gl.NEAREST;
+    vel=dbl(s.w,s.h,intRG,fmtRG,L);dye=dbl(d.w,d.h,intR,fmtR,L);dvg=fbo(s.w,s.h,intR,fmtR,N);crl=fbo(s.w,s.h,intR,fmtR,N);prs=dbl(s.w,s.h,intR,fmtR,N)}
+  function blit(t){if(t){gl.viewport(0,0,t.w,t.h);gl.bindFramebuffer(gl.FRAMEBUFFER,t.f)}else{gl.viewport(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight);gl.bindFramebuffer(gl.FRAMEBUFFER,null)}gl.drawElements(gl.TRIANGLES,6,gl.UNSIGNED_SHORT,0)}
+  function use(p,tx){gl.useProgram(p.p);if(p.u.tx&&tx)gl.uniform2f(p.u.tx,tx[0],tx[1]);return p.u}
+  function size(){var dpr=Math.min(devicePixelRatio||1,1.5),w=Math.round(innerWidth*dpr),h=Math.round(innerHeight*dpr);if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;return true}return false}
+  size();init();
+  var mx=0,my=0,px=0,py=0,moved=false,first=true,active=0;
+  var darkSel='.hero,.tasks,.cta,.sk.dark,.plan.feat,.step:last-child,.svc.photo',col=[1,1,1],tcol=[1,1,1];
+  addEventListener('pointermove',function(e){var el=document.elementFromPoint(e.clientX,e.clientY);tcol=(el&&el.closest&&el.closest(darkSel))?[1,1,1]:[.09,.07,.06];mx=e.clientX/innerWidth;my=1-e.clientY/innerHeight;if(first){px=mx;py=my;first=false}moved=true},{passive:true});
+  function splat(x,y,dx,dy,amt){var u=use(P.splat,vel.tx);gl.uniform1i(u.T,vel.r.bind(0));gl.uniform1f(u.ar,cv.width/cv.height);gl.uniform2f(u.pt,x,y);gl.uniform3f(u.c,dx,dy,0);gl.uniform1f(u.r,.0007);blit(vel.wr);vel.swap();
+    u=use(P.splat,dye.tx);gl.uniform1i(u.T,dye.r.bind(0));gl.uniform3f(u.c,amt,0,0);gl.uniform1f(u.r,.0009);blit(dye.wr);dye.swap()}
+  var last=performance.now();
+  function step(dt){gl.disable(gl.BLEND);var u;
+    u=use(P.curl,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));blit(crl);
+    u=use(P.vort,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));gl.uniform1i(u.C,crl.bind(1));gl.uniform1f(u.k,22);gl.uniform1f(u.dt,dt);blit(vel.wr);vel.swap();
+    u=use(P.div,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));blit(dvg);
+    u=use(P.fade,prs.tx);gl.uniform1i(u.T,prs.r.bind(0));gl.uniform1f(u.v,.8);blit(prs.wr);prs.swap();
+    u=use(P.pres,prs.tx);gl.uniform1i(u.D,dvg.bind(0));for(var i=0;i<18;i++){gl.uniform1i(u.Pr,prs.r.bind(1));blit(prs.wr);prs.swap()}
+    u=use(P.grad,vel.tx);gl.uniform1i(u.Pr,prs.r.bind(0));gl.uniform1i(u.V,vel.r.bind(1));blit(vel.wr);vel.swap();
+    u=use(P.adv,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));gl.uniform1i(u.S,vel.r.bind(0));gl.uniform1f(u.dt,dt);gl.uniform1f(u.dis,.6);blit(vel.wr);vel.swap();
+    u=use(P.adv,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));gl.uniform1i(u.S,dye.r.bind(1));gl.uniform1f(u.dis,1.9);blit(dye.wr);dye.swap()}
+  function loop(now){var dt=Math.min((now-last)/1000,.033);last=now;
+    if(size())init();
+    if(moved){var dx=(mx-px)*6000,dy=(my-py)*6000;if(Math.abs(dx)+Math.abs(dy)>0.5){splat(mx,my,dx,dy,Math.min(.38,.05+Math.hypot(mx-px,my-py)*10));active=2.5}px=mx;py=my;moved=false}
+    if(active>0){active-=dt;step(dt);for(var c=0;c<3;c++)col[c]+=(tcol[c]-col[c])*Math.min(1,dt*6);var u=use(P.show);gl.uniform1i(u.T,dye.r.bind(0));gl.uniform3f(u.col,col[0],col[1],col[2]);gl.uniform1f(u.op,col[0]>.5?.85:.55);blit(null)}
+    requestAnimationFrame(loop)}
+  requestAnimationFrame(loop);
 })();
 </script>
 
