@@ -1056,8 +1056,8 @@ body{margin:8px}
   var mx=0,my=0,px=0,py=0,cx=0,cy=0,moved=false,first=true,active=0,trail=[];
   addEventListener('pointermove',function(e){var el=document.elementFromPoint(e.clientX,e.clientY);tcol=(el&&el.closest&&el.closest(darkSel))?[1,1,1]:[.09,.07,.06];
     cx=e.clientX;cy=e.clientY;mx=cx/innerWidth;my=1-cy/innerHeight;if(first){px=mx;py=my;first=false}moved=true},{passive:true});
-  function splat(x,y,dx,dy,amt){var ar=cv.width/cv.height,u=use(P.splat,vel.tx);gl.uniform1i(u.T,vel.r.bind(0));gl.uniform1f(u.ar,ar);gl.uniform2f(u.pt,x,y);gl.uniform3f(u.c,dx,dy,0);gl.uniform1f(u.r,.0045);gl.uniform1f(u.mx,0);blit(vel.wr);vel.swap();
-    u=use(P.splat,dye.tx);gl.uniform1i(u.T,dye.r.bind(0));gl.uniform1f(u.ar,ar);gl.uniform2f(u.pt,x,y);gl.uniform3f(u.c,amt,0,0);gl.uniform1f(u.r,.0055);gl.uniform1f(u.mx,1);blit(dye.wr);dye.swap()}
+  function splat(x,y,dx,dy,amt){var ar=cv.width/cv.height,u=use(P.splat,vel.tx);gl.uniform1i(u.T,vel.r.bind(0));gl.uniform1f(u.ar,ar);gl.uniform2f(u.pt,x,y);gl.uniform3f(u.c,dx,dy,0);gl.uniform1f(u.r,.00288);gl.uniform1f(u.mx,0);blit(vel.wr);vel.swap();
+    u=use(P.splat,dye.tx);gl.uniform1i(u.T,dye.r.bind(0));gl.uniform1f(u.ar,ar);gl.uniform2f(u.pt,x,y);gl.uniform3f(u.c,amt,0,0);gl.uniform1f(u.r,.00352);gl.uniform1f(u.mx,1);blit(dye.wr);dye.swap()}
   function step(dt){var u;
     u=use(P.curl,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));blit(crl);
     u=use(P.vort,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));gl.uniform1i(u.C,crl.bind(1));gl.uniform1f(u.k,1.5);gl.uniform1f(u.dt,dt);blit(vel.wr);vel.swap();
@@ -1068,7 +1068,7 @@ body{margin:8px}
     u=use(P.adv,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));gl.uniform1i(u.S,vel.r.bind(0));gl.uniform1f(u.dt,dt);gl.uniform1f(u.dis,2.2);blit(vel.wr);vel.swap();
     u=use(P.adv,vel.tx);gl.uniform1i(u.V,vel.r.bind(0));gl.uniform1i(u.S,dye.r.bind(1));gl.uniform1f(u.dis,1.05);blit(dye.wr);dye.swap()}
   function drawCards(){var W=innerWidth,H=innerHeight,any=false;
-    var u=use(P.img);gl.uniform2f(u.scr,cv.width,cv.height);gl.uniform1i(u.V,vel.r.bind(1));gl.uniform1f(u.amt,.0006);
+    var u=use(P.img);gl.uniform2f(u.scr,cv.width,cv.height);gl.uniform1i(u.V,vel.r.bind(1));gl.uniform1f(u.amt,.00048);
     for(var i=0;i<cards.length;i++){var c=cards[i];if(!c.tex)continue;var r=c.box.getBoundingClientRect();if(r.bottom<0||r.top>H||r.width<2)continue;
       var op=+getComputedStyle(c.card).opacity;if(op<.01)continue;any=true;var dpr=cv.width/W;
       gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,c.tex);gl.uniform1i(u.I,0);gl.uniform2f(u.sz,r.width*dpr,r.height*dpr);gl.uniform2f(u.isz,c.iw,c.ih);gl.uniform1f(u.rad,24*dpr);gl.uniform1f(u.op,op);
@@ -1078,9 +1078,9 @@ body{margin:8px}
     var H=innerHeight;
     for(var i=0;i<words.length;i++){var w=words[i],target=0;
       if(trail.length){var r=w.el.getBoundingClientRect();if(r.bottom>-50&&r.top<H+50){var x=r.left+r.width/2,y=r.top+r.height/2,rw=Math.max(60,r.width*.5);
-        for(var j=0;j<trail.length;j++){var p=trail[j],ax=Math.max(0,Math.abs(p.x-x)-rw*.6),ay=Math.max(0,Math.abs(p.y-y)-r.height*.3);var f=Math.exp(-(ax*ax+ay*ay)/3600)*(1-(now-p.t)/900);if(f>target)target=f}}}
+        for(var j=0;j<trail.length;j++){var p=trail[j],ax=Math.max(0,Math.abs(p.x-x)-rw*.6),ay=Math.max(0,Math.abs(p.y-y)-r.height*.3);var f=Math.exp(-(ax*ax+ay*ay)/2300)*(1-(now-p.t)/900);if(f>target)target=f}}}
       w.s+=(target-w.s)*Math.min(1,dt*(target>w.s?14:4));
-      var s=w.s,st=w.el.style;
+      var s=w.s*.8,st=w.el.style;
       if(s>.02){var d=(s*7).toFixed(1);if(!w.soft)st.transform='translateX('+(s*6).toFixed(1)+'px) skewX('+(-s*10).toFixed(1)+'deg)';st.filter='blur('+(s*1.6).toFixed(2)+'px)';st.textShadow=d+'px 0 rgba(255,40,90,.55),-'+d+'px 0 rgba(0,190,255,.55)';w.on=true}
       else if(w.on){st.transform='';st.filter='';st.textShadow='';w.on=false}}}
   var last=performance.now();
@@ -1094,7 +1094,7 @@ body{margin:8px}
     gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
     gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
     if(ready)drawCards();
-    if(active>0){for(var c=0;c<3;c++)col[c]+=(tcol[c]-col[c])*Math.min(1,dt*6);var u=use(P.show,dye.tx);gl.uniform1i(u.T,dye.r.bind(0));gl.uniform3f(u.col,col[0],col[1],col[2]);gl.uniform1f(u.op,col[0]>.5?.96:.7);blit(null)}
+    if(active>0){for(var c=0;c<3;c++)col[c]+=(tcol[c]-col[c])*Math.min(1,dt*6);var u=use(P.show,dye.tx);gl.uniform1i(u.T,dye.r.bind(0));gl.uniform3f(u.col,col[0],col[1],col[2]);gl.uniform1f(u.op,col[0]>.5?.77:.56);blit(null)}
     smearText(dt);
     requestAnimationFrame(loop)}
   requestAnimationFrame(loop);
