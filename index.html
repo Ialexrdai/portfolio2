@@ -435,7 +435,8 @@ html.loading,html.loading body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pre{display:none}}
 
 /* ---------- tasks: dark rounded panel, left-aligned text, 4 CRM cases ---------- */
-.tasks-shell{padding:0 max(10px,env(safe-area-inset-right,0px)) 0 max(10px,env(safe-area-inset-left,0px));margin-bottom:clamp(64px,9vw,120px)}
+body{margin:8px}
+.tasks-shell{padding:0;margin-inline:-8px;margin-bottom:clamp(64px,9vw,120px)}
 .tasks{background:#0e0c0b;color:var(--on-dark);border-radius:var(--r-xl);padding-block:clamp(64px,8vw,110px)}
 .tasks-h{font-size:clamp(30px,4.4vw,68px);font-weight:500;letter-spacing:-.04em;line-height:1;color:var(--on-dark)}
 .tasks-h .ln,.tasks-sub .ln{display:block}
@@ -602,7 +603,7 @@ html.loading,html.loading body{overflow:hidden}
         <p>Воронка с напоминаниями о звонках, сделки по этапам, витрина авто и договоры по шаблону.</p>
       </a>
       <a class="cs" href="#cases">
-        <div class="cs-pic phone"><img src="img/w4-ph1.jpg" alt="Мини-приложение записи на телефоне" loading="lazy"></div>
+        <div class="cs-pic"><img src="img/key-phone.jpg" alt="Мини-приложение на телефоне" loading="lazy"></div>
         <div class="cs-tags">Мини-приложение<i>-</i>Запись<i>-</i>Мобайл</div>
         <h3>Запись для выездного мастера</h3>
         <p>Расписание, форма записи, сводка и вся история клиента по номеру телефона.</p>
