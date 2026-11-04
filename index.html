@@ -434,36 +434,31 @@ footer{font-size:13px}
 html.loading,html.loading body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pre{display:none}}
 
-/* ---------- tasks: page turns black, text and gradients follow the scroll ---------- */
-.bgfade{position:fixed;inset:-50vh 0;z-index:-1;background:#000;opacity:0;pointer-events:none}
-.tasks{position:relative;height:260vh}
-.tasks-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:visible;overflow-x:clip;display:flex;align-items:center}
-.tasks-in{position:relative;z-index:1;width:100%}
-.tasks-h{font-size:clamp(30px,4.4vw,68px);font-weight:500;word-spacing:.02em;letter-spacing:-.04em;line-height:1;color:var(--on-dark);max-width:62%}
+/* ---------- tasks: dark rounded panel, left-aligned text, 4 CRM cases ---------- */
+.tasks-shell{padding:0 max(10px,env(safe-area-inset-right,0px)) 0 max(10px,env(safe-area-inset-left,0px));margin-bottom:clamp(64px,9vw,120px)}
+.tasks{background:#0e0c0b;color:var(--on-dark);border-radius:var(--r-xl);padding-block:clamp(64px,8vw,110px)}
+.tasks-h{font-size:clamp(30px,4.4vw,68px);font-weight:500;letter-spacing:-.04em;line-height:1;color:var(--on-dark)}
 .tasks-h .ln,.tasks-sub .ln{display:block}
 .tw{display:inline-block;transform-origin:left center;will-change:transform,filter,opacity}
-.tasks-h .l2{padding-left:1.6em;white-space:nowrap}
-.tasks-h .ln:first-child{white-space:nowrap}
 .rv{display:inline}
 .tasks-sub{margin-top:20px;font-size:clamp(15px,1.5vw,22px);font-weight:500;letter-spacing:-.01em;color:#8a817a}
-.tasks-intro{margin-top:32px;margin-left:clamp(0px,24vw,360px);max-width:34ch;font-size:14px;color:#b9aea6}
-.tasks-glow{--p:0;position:absolute;inset:-30vh 0;pointer-events:none}
-.tasks-glow i{position:absolute;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;will-change:transform}
-.tasks-glow .g1{width:62vw;height:62vw;max-width:980px;max-height:980px;right:-14vw;top:-18vh;background:radial-gradient(circle,#ff7a2e 0%,rgba(255,122,46,0) 65%);transform:translate(calc(var(--p)*-18vw),calc(var(--p)*30vh)) scale(calc(.8 + var(--p)*.4))}
-.tasks-glow .g2{width:48vw;height:48vw;max-width:760px;max-height:760px;right:4vw;bottom:-22vh;background:radial-gradient(circle,#c43d06 0%,rgba(196,61,6,0) 68%);transform:translate(calc(var(--p)*-10vw),calc(var(--p)*-26vh))}
-.tasks-glow .g3{width:30vw;height:30vw;max-width:480px;max-height:480px;right:22vw;top:18vh;background:radial-gradient(circle,#ffd9c2 0%,rgba(255,217,194,0) 66%);opacity:.75;transform:translate(calc(var(--p)*20vw),calc(var(--p)*18vh)) scale(calc(1.2 - var(--p)*.5))}
-.tasks-glow .g4{width:40vw;height:40vw;max-width:640px;max-height:640px;right:-10vw;top:30vh;background:radial-gradient(circle,#ff5a14 0%,rgba(255,90,20,0) 66%);opacity:.8;transform:translate(calc(var(--p)*-24vw),calc(var(--p)*-12vh))}
-.tasks-glow{opacity:0}
-@media (max-width:860px){
-  .tasks-h{max-width:none}
-  .tasks-h .l2{padding-left:1em}
-  .tasks-intro{margin-left:0}
-  .tasks-glow i{filter:blur(40px)}
-  .tasks-glow .g1{width:120vw;height:120vw;right:-50vw;top:-10vh}
-  .tasks-glow .g2{width:90vw;height:90vw;right:-30vw}
-}
-@media (max-width:480px){.tasks-h .ln:first-child,.tasks-h .l2{white-space:normal}}
-@media (prefers-reduced-motion:reduce){.tasks{height:auto}.tasks-stick{position:relative;height:auto;padding-block:120px;background:#000}.tasks-glow{opacity:1}}
+.tasks-intro{margin-top:24px;max-width:46ch;font-size:14px;color:#b9aea6}
+.cs-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,4vw,56px) 20px;margin-top:clamp(48px,6vw,80px)}
+.cs{text-decoration:none;color:inherit;display:block;opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.cs.seen{opacity:1;transform:none}
+.cs:nth-child(2n).seen{transition-delay:.12s}
+.cs-pic{position:relative;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:16/10;background:#171311}
+.cs-pic img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.cs:hover .cs-pic img{transform:scale(1.04)}
+.cs:hover .cs-pic.phone img{transform:translateY(-6px) scale(1.03)}
+.cs-pic.phone{display:grid;place-items:center;background:radial-gradient(60% 75% at 50% 45%,rgba(255,90,20,.55),rgba(255,90,20,0) 70%),#0a0807}
+.cs-pic.phone img{position:absolute;left:50%;top:8%;translate:-50% 0;width:auto;height:84%;object-fit:contain;border-radius:20px;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.cs-tags{margin-top:22px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6f6660}
+.cs-tags i{font-style:normal;margin:0 .7em;color:#4a423c}
+.cs h3{margin-top:10px;font-size:clamp(26px,3vw,44px);letter-spacing:-.04em;line-height:1.02}
+.cs p{margin-top:12px;font-size:14px;color:#9a908a;max-width:48ch}
+@media (max-width:760px){.cs-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.cs{opacity:1;transform:none;transition:none}}
 
 /* ---------- motion ---------- */
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
@@ -579,17 +574,43 @@ html.loading,html.loading body{overflow:hidden}
   </div>
 </section>
 
-<div class="bgfade" aria-hidden="true"></div>
+<div class="tasks-shell">
 <section class="tasks" id="cases" aria-labelledby="ts-h">
-  <div class="tasks-stick">
-    <div class="tasks-glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="g4"></i></div>
-    <div class="wrap tasks-in">
-      <h2 class="tasks-h" id="ts-h"><span class="ln"><span class="rv">Задачи, которые</span></span><span class="ln l2"><span class="rv">я решал для клиентов</span></span></h2>
+  <div class="wrap">
+    <div class="tasks-in">
+      <h2 class="tasks-h" id="ts-h"><span class="ln"><span class="rv">Задачи, которые</span></span><span class="ln"><span class="rv">я решал для клиентов</span></span></h2>
       <p class="tasks-sub"><span class="ln"><span class="rv">Реализованные проекты</span></span></p>
       <p class="tasks-intro"><span class="rv">По каждому проекту коротко рассказываю, какая стояла задача, что я сделал и почему выбрал именно такое решение.</span></p>
     </div>
+    <div class="cs-grid">
+      <a class="cs" href="#cases">
+        <div class="cs-pic"><img src="img/voda-monitor.jpg" alt="CRM клининг-сервиса «Вода» на мониторе" loading="lazy"></div>
+        <div class="cs-tags">CRM<i>-</i>Клининг<i>-</i>Финансы</div>
+        <h3>Клининг-сервис «Вода»</h3>
+        <p>Расписание, клиенты и все цифры в одном окне, а зарплата клинеров считается сама.</p>
+      </a>
+      <a class="cs" href="#cases">
+        <div class="cs-pic"><img src="img/crm-monitor.jpg" alt="CRM детейлинг-студии ATS Detailing" loading="lazy"></div>
+        <div class="cs-tags">CRM<i>-</i>Детейлинг<i>-</i>Акт приёмки</div>
+        <h3>ATS Detailing</h3>
+        <p>Записи, клиенты с LTV, финансы и акт приёмки авто со схемой кузова и подписью клиента.</p>
+      </a>
+      <a class="cs" href="#cases">
+        <div class="cs-pic"><img src="img/ga-mock.jpg" alt="CRM для импорта авто GlobalAuto" loading="lazy"></div>
+        <div class="cs-tags">CRM<i>-</i>Автоимпорт<i>-</i>Сделки</div>
+        <h3>GlobalAuto</h3>
+        <p>Воронка с напоминаниями о звонках, сделки по этапам, витрина авто и договоры по шаблону.</p>
+      </a>
+      <a class="cs" href="#cases">
+        <div class="cs-pic phone"><img src="img/w4-ph1.jpg" alt="Мини-приложение записи на телефоне" loading="lazy"></div>
+        <div class="cs-tags">Мини-приложение<i>-</i>Запись<i>-</i>Мобайл</div>
+        <h3>Запись для выездного мастера</h3>
+        <p>Расписание, форма записи, сводка и вся история клиента по номеру телефона.</p>
+      </a>
+    </div>
   </div>
 </section>
+</div>
 
 <section class="sec wrap" id="services" aria-labelledby="svc-h" style="padding-top:0">
   <div class="head">
@@ -902,7 +923,7 @@ html.loading,html.loading body{overflow:hidden}
 
   // scroll-linked: statement words light up, hero photo drifts
   var ph=document.querySelector('.hero-ph'), ticking=false;
-  var ts=document.querySelector('.tasks'), bgf=document.querySelector('.bgfade'), glow=ts&&ts.querySelector('.tasks-glow'), tin=ts&&ts.querySelector('.tasks-in'), tw=[];
+  var ts=document.querySelector('.tasks'), tin=ts&&ts.querySelector('.tasks-in'), tw=[];
   if(tin){
     tin.querySelectorAll('.rv').forEach(function(el){
       var parts=el.textContent.split(/(\s+)/);el.textContent='';
@@ -913,6 +934,8 @@ html.loading,html.loading body{overflow:hidden}
       });
     });
   }
+  var csl=document.querySelectorAll('.cs');
+  if('IntersectionObserver' in window){var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('seen');cio.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});csl.forEach(function(c){cio.observe(c)})}else csl.forEach(function(c){c.classList.add('seen')});
   var sk=document.querySelector('.skills'), skCards=sk?sk.children:[], skOff=[170,60,250,110];
   function frame(){
     ticking=false;
@@ -924,17 +947,10 @@ html.loading,html.loading body{overflow:hidden}
       for(var i=0;i<words.length;i++) words[i].classList.toggle('on',i<n);
     }
     if(ts){
-      var tr=ts.getBoundingClientRect(), pin=Math.max(1,tr.height-vh);
+      var tr=tin.getBoundingClientRect();
       var cl=function(x){return x<0?0:x>1?1:x}, sm=function(x){x=cl(x);return x*x*(3-2*x)};
-      // page fades to black as the block comes in, and back to light as it leaves
-      var out=sm((vh*1.4-tr.bottom)/(vh*0.4));
-      var dark=sm((vh*0.55-tr.top)/(vh*0.55))*(1-out);
-      bgf.style.opacity=dark.toFixed(3);
-      glow.style.opacity=dark.toFixed(3);
-      tin.style.opacity=(1-out).toFixed(3);
-      glow.style.setProperty('--p',cl((vh-tr.top)/(vh+tr.height)).toFixed(3));
       // words come into focus one by one, tied to the scroll position
-      var q=cl((vh*0.2-tr.top)/(vh*0.2+pin*0.6)), N=tw.length, span=5;
+      var q=cl((vh*0.92-tr.top)/(vh*0.55)), N=tw.length, span=5;
       for(var k=0;k<N;k++){
         var t=sm((q*(N+span)-k)/span), u=1-t;
         var s=tw[k].style;
