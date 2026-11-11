@@ -61,7 +61,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 .track{position:relative;display:flex;height:100%;width:max-content;will-change:transform;background:var(--mist)}
 .zone{display:flex;height:100%;flex:none}
 .dark{background:var(--coal);color:var(--on-dark)}
-.pn{flex:none;height:100%;display:flex;align-items:center;padding-inline:clamp(28px,4.5vw,80px)}
+.pn{flex:none;height:100%;display:flex;align-items:safe center;padding-inline:clamp(28px,4.5vw,80px);padding-block:76px 60px}
 .fade{flex:none;width:clamp(160px,32vw,520px);height:100%}
 .zone.dark>.pn:last-child{padding-right:clamp(48px,8vw,140px)}
 
@@ -191,6 +191,31 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 
 .stars{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:61}
 
+@media (max-width:700px){
+  .intro{flex-direction:column;justify-content:center;align-items:flex-start;gap:26px;width:100vw;padding-inline:20px}
+  .intro-txt{width:100%}
+  .ttl{font-size:clamp(40px,12.5vw,60px)}
+  .sub{margin-top:16px;font-size:16px}
+  .meta{margin-top:22px;gap:18px}.meta div{min-width:0}
+  .intro-pic{height:auto;width:100%}
+  .hint{position:static;margin-top:4px}
+  .tags{margin-bottom:16px}
+  .pn{padding-inline:20px;padding-block:72px 54px}
+  .brief{gap:40px}.bf{width:calc(100vw - 40px)}
+  .ch-ttl{font-size:38px;margin-bottom:18px}.ch-k{margin-bottom:12px}
+  .pts{gap:14px}.pts p{font-size:13.5px;line-height:1.42;padding-top:10px}.pts b{margin-bottom:3px}
+  .ch-head{width:calc(100vw - 40px)}
+  .phones{gap:22vw}.ph.up{margin-top:-5vh}.ph.dn{margin-top:5vh}
+  .formcard{margin-left:0;width:78vw;translate:none}
+  .snips{width:auto;gap:14vw;padding:0;background:none}
+  .snips div{flex:none;width:72vw;padding:14px;border-radius:22px;background:linear-gradient(180deg,#e3eeef,#d6e6e8)}
+  .snips img:nth-child(2){margin-left:0;width:100%}
+  .fin{display:flex;align-items:center;gap:20vw;width:auto}
+  .fin img{width:84vw}
+  .stmt{font-size:29px}
+  .more h2{font-size:34px;margin-bottom:22px}
+  .home{margin-top:26px}
+}
 @media (prefers-reduced-motion:reduce){
   .js .rx{opacity:1!important;transform:none;transition:none}
   .js .pop{opacity:1;translate:none;transition:none}
@@ -213,7 +238,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 
   <div class="zone dark">
     <section class="pn intro" data-ch="О проекте" data-n="00" aria-labelledby="t">
-      <div class="intro-txt">
+      <div class="intro-txt snapit">
         <div class="tags">CRM<i>-</i>Клининг<i>-</i>Финансы</div>
         <h1 class="ttl" id="t"><span class="ln"><span>Клининг-сервис</span></span><span class="ln"><span><em>«Вода»</em></span></span></h1>
         <p class="sub">CRM для клининговой компании: расписание, клиенты и все цифры в одном окне, а зарплата клинеров считается сама.</p>
@@ -223,20 +248,20 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
           <div><dt>Год</dt><dd>2026</dd></div>
         </dl>
       </div>
-      <figure class="intro-pic" data-speed="-.12"><img class="sk" src="img/voda-laptop.jpg" width="1199" height="781" alt="CRM клининг-сервиса «Вода» на ноутбуке"></figure>
+      <figure class="intro-pic snapit" data-speed="-.12"><img class="sk" src="img/voda-laptop.jpg" width="1199" height="781" alt="CRM клининг-сервиса «Вода» на ноутбуке"></figure>
       <p class="hint" id="hint"><span class="ar" aria-hidden="true">→</span>Листайте вниз, кейс поедет вбок</p>
     </section>
 
     <section class="pn brief" aria-label="Проблема, задача и решение">
-      <div class="bf rx">
+      <div class="snapit bf rx">
         <div class="k"><span>Проблема</span><span>01</span></div>
         <p>Компания <em>давно переросла запись в календаре телефона, переписках с менеджером и таблицах Excel</em>. Пробовали подключить CRM от крупных разработчиков, но не подошли ни сроки внедрения, ни стоимость, ни функционал.</p>
       </div>
-      <div class="bf rx" style="--d:.1s">
+      <div class="snapit bf rx" style="--d:.1s">
         <div class="k"><span>Задача</span><span>02</span></div>
         <p>Создать <em>веб-приложение для записи клиентов и ведения клиентской базы</em> с полной историей работы по каждому клиенту: суммами, заметками и фотографиями объектов. Отдельно нужен был <em>автоматический расчёт зарплаты клинеров</em>.</p>
       </div>
-      <div class="bf sol rx" style="--d:.2s">
+      <div class="snapit bf sol rx" style="--d:.2s">
         <div class="k"><span>Решение</span><span>03</span></div>
         <p>Разработал веб-приложение с приятным и понятным интерфейсом, в котором есть <em>весь функционал, нужный заказчику</em>.</p>
       </div>
@@ -262,10 +287,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   </section>
   <section class="pn" aria-label="Дашборд на телефоне">
     <div class="phones">
-      <figure class="ph up rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m1.jpg" width="591" height="1280" alt="Дашборд со сводкой по компании" loading="lazy"></div><img class="pop p3" src="img/voda-pop3.png" alt="" loading="lazy"></div></figure>
-      <figure class="ph dn rx" data-speed="-.04" style="--d:.08s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m4.jpg" width="591" height="1280" alt="Выбор периода на дашборде" loading="lazy"></div><img class="pop" src="img/voda-pop.png" alt="" loading="lazy"></div></figure>
-      <figure class="ph up rx" data-speed=".06" style="--d:.16s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m2.jpg" width="591" height="1280" alt="График доходов и расходов и динамика" loading="lazy"></div><img class="pop p2" src="img/voda-pop2.png" alt="" loading="lazy"></div></figure>
-      <figure class="ph dn rx" data-speed="-.03" style="--d:.24s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m3.jpg" width="591" height="1280" alt="Ближайшие и отменённые заказы, данные клиентов вымышленные" loading="lazy"></div></div></figure>
+      <figure class="snapit ph up rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m1.jpg" width="591" height="1280" alt="Дашборд со сводкой по компании" loading="lazy"></div><img class="pop p3" src="img/voda-pop3.png" alt="" loading="lazy"></div></figure>
+      <figure class="snapit ph dn rx" data-speed="-.04" style="--d:.08s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m4.jpg" width="591" height="1280" alt="Выбор периода на дашборде" loading="lazy"></div><img class="pop" src="img/voda-pop.png" alt="" loading="lazy"></div></figure>
+      <figure class="snapit ph up rx" data-speed=".06" style="--d:.16s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m2.jpg" width="591" height="1280" alt="График доходов и расходов и динамика" loading="lazy"></div><img class="pop p2" src="img/voda-pop2.png" alt="" loading="lazy"></div></figure>
+      <figure class="snapit ph dn rx" data-speed="-.03" style="--d:.24s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m3.jpg" width="591" height="1280" alt="Ближайшие и отменённые заказы, данные клиентов вымышленные" loading="lazy"></div></div></figure>
     </div>
   </section>
 
@@ -285,16 +310,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   </section>
   <section class="pn" aria-label="Расписание на телефоне">
     <div class="phones">
-      <figure class="ph up rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s1.jpg" width="591" height="1280" alt="Календарь заказов на месяц" loading="lazy"></div></div></figure>
-      <figure class="ph dn rx" data-speed="-.04" style="--d:.08s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s2.jpg" width="591" height="1280" alt="Заказы на выбранный день, данные клиентов вымышленные" loading="lazy"></div></div></figure>
-      <figure class="ph up rx" data-speed=".03" style="--d:.16s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s3.jpg" width="591" height="1280" alt="Форма нового заказа" loading="lazy"></div></div></figure>
-      <figure class="formcard rx" data-speed=".1" style="--d:.4s"><img class="sk" src="img/voda-form.png" width="1110" height="1372" alt="Продолжение формы нового заказа" loading="lazy"></figure>
+      <figure class="snapit ph up rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s1.jpg" width="591" height="1280" alt="Календарь заказов на месяц" loading="lazy"></div></div></figure>
+      <figure class="snapit ph dn rx" data-speed="-.04" style="--d:.08s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s2.jpg" width="591" height="1280" alt="Заказы на выбранный день, данные клиентов вымышленные" loading="lazy"></div></div></figure>
+      <figure class="snapit ph up rx" data-speed=".03" style="--d:.16s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s3.jpg" width="591" height="1280" alt="Форма нового заказа" loading="lazy"></div></div></figure>
+      <figure class="snapit formcard rx" data-speed=".1" style="--d:.4s"><img class="sk" src="img/voda-form.png" width="1110" height="1372" alt="Продолжение формы нового заказа" loading="lazy"></figure>
     </div>
   </section>
   <section class="pn" aria-label="Выпадающие списки формы">
     <figure class="snips rx" data-speed="-.05">
-      <div><img src="img/voda-x1.png" width="550" height="336" alt="Выбор клиента и повтор последнего заказа, имя вымышленное" loading="lazy"><img src="img/voda-x3.png" width="569" height="589" alt="Выбор услуги" loading="lazy"></div>
-      <div><img src="img/voda-x2.png" width="568" height="472" alt="Выбор статуса заказа" loading="lazy"><img src="img/voda-x4.png" width="568" height="507" alt="Выбор периодичности повтора" loading="lazy"></div>
+      <div class="snapit"><img src="img/voda-x1.png" width="550" height="336" alt="Выбор клиента и повтор последнего заказа, имя вымышленное" loading="lazy"><img src="img/voda-x3.png" width="569" height="589" alt="Выбор услуги" loading="lazy"></div>
+      <div class="snapit"><img src="img/voda-x2.png" width="568" height="472" alt="Выбор статуса заказа" loading="lazy"><img src="img/voda-x4.png" width="568" height="507" alt="Выбор периодичности повтора" loading="lazy"></div>
     </figure>
   </section>
 
@@ -313,9 +338,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   </section>
   <section class="pn" aria-label="База клиентов на телефоне">
     <div class="phones wide-l">
-      <figure class="ph rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kL.jpg" width="591" height="1280" alt="Список клиентов, данные вымышленные" loading="lazy"></div><img class="pop kc k1" src="img/voda-kc1.png" alt="" loading="lazy"><img class="pop kc k2" src="img/voda-kc2.png" alt="" loading="lazy"><img class="pop kc k3" src="img/voda-kc3.png" alt="" loading="lazy"></div></figure>
-      <figure class="ph dn rx" data-speed="-.04" style="--d:.1s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kC.jpg" width="591" height="1280" alt="Карточка клиента с историей заказов, данные вымышленные" loading="lazy"></div></div></figure>
-      <figure class="ph up rx" data-speed=".04" style="--d:.2s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kR.jpg" width="591" height="1280" alt="Форма нового клиента" loading="lazy"></div></div></figure>
+      <figure class="snapit ph rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kL.jpg" width="591" height="1280" alt="Список клиентов, данные вымышленные" loading="lazy"></div><img class="pop kc k1" src="img/voda-kc1.png" alt="" loading="lazy"><img class="pop kc k2" src="img/voda-kc2.png" alt="" loading="lazy"><img class="pop kc k3" src="img/voda-kc3.png" alt="" loading="lazy"></div></figure>
+      <figure class="snapit ph dn rx" data-speed="-.04" style="--d:.1s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kC.jpg" width="591" height="1280" alt="Карточка клиента с историей заказов, данные вымышленные" loading="lazy"></div></div></figure>
+      <figure class="snapit ph up rx" data-speed=".04" style="--d:.2s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kR.jpg" width="591" height="1280" alt="Форма нового клиента" loading="lazy"></div></div></figure>
     </div>
   </section>
 
@@ -334,9 +359,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   </section>
   <section class="pn" aria-label="Экраны финансов">
     <figure class="fin">
-      <img class="rx sk" src="img/voda-fin1.png" width="2602" height="764" alt="Зарплаты клинеров, имена вымышленные" loading="lazy">
-      <img class="rx sk" style="--d:.1s" src="img/voda-fin2.png" width="1281" height="1238" alt="Доходы, данные клиентов вымышленные" loading="lazy">
-      <img class="rx sk" style="--d:.2s" src="img/voda-fin3.png" width="1264" height="1221" alt="Расходы, данные клиентов вымышленные" loading="lazy">
+      <img class="snapit rx sk" src="img/voda-fin1.png" width="2602" height="764" alt="Зарплаты клинеров, имена вымышленные" loading="lazy">
+      <img class="snapit rx sk" style="--d:.1s" src="img/voda-fin2.png" width="1281" height="1238" alt="Доходы, данные клиентов вымышленные" loading="lazy">
+      <img class="snapit rx sk" style="--d:.2s" src="img/voda-fin3.png" width="1264" height="1221" alt="Расходы, данные клиентов вымышленные" loading="lazy">
     </figure>
   </section>
 
@@ -400,7 +425,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
     rev=[].map.call(track.querySelectorAll('.rx'),function(el){return{el:el,x:offX(el)}});
     // one stop per screen: a panel narrower than the screen is centred, a wider one is paged through in equal steps
     var s=[];[].forEach.call(track.querySelectorAll('.pn'),function(el){var L=offX(el),w=el.offsetWidth;
-      if(w-W<W*.35)s.push(L+w/2-W/2);else{var n=Math.ceil((w-W)/(W*.9));for(var i=0;i<=n;i++)s.push(L+(w-W)*i/n)}});
+      if(w-W<W*.35)s.push(L+w/2-W/2);else{var it=el.querySelectorAll('.snapit');
+        if(it.length)[].forEach.call(it,function(c){var cw=c.offsetWidth,cl=offX(c);if(cw<=W)s.push(cl+cw/2-W/2);else for(var j=0,m=Math.ceil((cw-W)/(W*.9));j<=m;j++)s.push(cl+(cw-W)*j/m)});
+        else{var n=Math.ceil((w-W)/(W*.9));for(var i=0;i<=n;i++)s.push(L+(w-W)*i/n)}}});
     s=s.map(clamp);s.push(0);s.sort(function(a,b){return a-b});snaps=[];s.forEach(function(v){if(!snaps.length||v-snaps[snaps.length-1]>W*.25)snaps.push(v)});
     chs=[].map.call(track.querySelectorAll('[data-ch]'),function(el){return{x:offX(el),i:nearest(clamp(snapOf(el))),t:el.dataset.ch,n:el.dataset.n}});
     sx=offX(stmt);sw=stmt.offsetWidth;
