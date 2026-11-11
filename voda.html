@@ -56,8 +56,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 
 /* ---------- horizontal scroller ---------- */
 .hs-pin{height:100vh;height:100svh;overflow-x:auto;overflow-y:hidden}
-.js,.js body{overflow:hidden;height:100%;overscroll-behavior:none}
-.js .hs-pin{overflow:hidden;touch-action:none}
+.js .hs-pin{position:sticky;top:0;overflow:hidden}
 .track{position:relative;display:flex;height:100%;width:max-content;will-change:transform;background:var(--mist)}
 .zone{display:flex;height:100%;flex:none}
 .dark{background:var(--coal);color:var(--on-dark)}
@@ -416,61 +415,45 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
     else split(n,hl||n.classList.contains('hl'))})})(stmt,false);
 
   function offX(el){var x=0;while(el&&el!==track){x+=el.offsetLeft;el=el.offsetParent}return x}
-  var W,H,maxX=0,par=[],rev=[],chs=[],snaps=[],idx=0,sx=0,sw=0,cur=0,prev=0,sk=0,curCh=-1;
-  var from=0,to=0,t0=0,DUR=rm?0:1050,busy=false;
-  function snapOf(el){var L=offX(el),w=el.offsetWidth;return w<=W?L+w/2-W/2:L}
+  var W,H,maxX=0,top0=0,par=[],rev=[],chs=[],sx=0,sw=0,cur=0,tgt=0,prev=0,sk=0,curCh=-1;
   function measure(){
     W=innerWidth;H=pin.clientHeight;maxX=Math.max(0,track.scrollWidth-W);
+    hs.style.height=(maxX+H)+'px';top0=hs.offsetTop;
     par=[].map.call(track.querySelectorAll('[data-speed]'),function(el){return{el:el,x:offX(el)+el.offsetWidth/2,s:+el.dataset.speed}});
     rev=[].map.call(track.querySelectorAll('.rx'),function(el){return{el:el,x:offX(el)}});
-    // one stop per screen: a panel narrower than the screen is centred, a wider one is paged through in equal steps
-    var s=[];[].forEach.call(track.querySelectorAll('.pn'),function(el){var L=offX(el),w=el.offsetWidth;
-      if(w-W<W*.35)s.push(L+w/2-W/2);else{var it=el.querySelectorAll('.snapit');
-        if(it.length)[].forEach.call(it,function(c){var cw=c.offsetWidth,cl=offX(c);if(cw<=W)s.push(cl+cw/2-W/2);else for(var j=0,m=Math.ceil((cw-W)/(W*.9));j<=m;j++)s.push(cl+(cw-W)*j/m)});
-        else{var n=Math.ceil((w-W)/(W*.9));for(var i=0;i<=n;i++)s.push(L+(w-W)*i/n)}}});
-    s=s.map(clamp);s.push(0);s.sort(function(a,b){return a-b});snaps=[];s.forEach(function(v){if(!snaps.length||v-snaps[snaps.length-1]>W*.25)snaps.push(v)});
-    chs=[].map.call(track.querySelectorAll('[data-ch]'),function(el){return{x:offX(el),i:nearest(clamp(snapOf(el))),t:el.dataset.ch,n:el.dataset.n}});
+    chs=[].map.call(track.querySelectorAll('[data-ch]'),function(el){return{x:offX(el),t:el.dataset.ch,n:el.dataset.n}});
     sx=offX(stmt);sw=stmt.offsetWidth;
     prog.querySelectorAll('button').forEach(function(b){b.remove()});
-    chs.forEach(function(c){var b=document.createElement('button');b.type='button';b.style.left=(maxX?snaps[c.i]/maxX*100:0)+'%';b.innerHTML='<i></i><span>'+c.n+' '+c.t+'</span>';b.setAttribute('aria-label',c.t);
-      b.addEventListener('click',function(){go(c.i)});prog.appendChild(b)});
-    idx=nearest(busy?to:cur);if(busy)to=snaps[idx];else cur=from=to=snaps[idx]
+    chs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.style.left=(maxX?Math.min(c.x/maxX,1)*100:0)+'%';b.innerHTML='<i></i><span>'+c.n+' '+c.t+'</span>';b.setAttribute('aria-label',c.t);
+      b.addEventListener('click',function(){go(c.x)});prog.appendChild(b)});
+    tgt=clamp(scrollY-top0);
   }
   function clamp(v){return Math.max(0,Math.min(maxX,v))}
-  function nearest(x){var b=0;for(var i=1;i<snaps.length;i++)if(Math.abs(snaps[i]-x)<Math.abs(snaps[b]-x))b=i;return b}
-  function go(i){i=Math.max(0,Math.min(snaps.length-1,i));if(i===idx&&!busy)return;idx=i;from=cur;to=snaps[i];t0=performance.now();busy=true;if(i>0)hint.classList.add('gone')}
-  function step(d){if(busy&&performance.now()-t0<DUR*.8)return;go(idx+d)}
-  // wheel and trackpad: one gesture turns one screen; the inertial tail of a flick is ignored
-  var lastW=0,lastA=0;
-  addEventListener('wheel',function(e){e.preventDefault();var d=Math.abs(e.deltaY)>=Math.abs(e.deltaX)?e.deltaY:e.deltaX,a=Math.abs(d),now=performance.now();
-    if(a<2)return;var gap=now-lastW,fresh=gap>220||(a>lastA*2.2&&a>40&&now-t0>DUR*.7);lastW=now;lastA=a;if(fresh)step(d>0?1:-1)},{passive:false});
-  var tx=0,ty=0,tt=false;
-  addEventListener('touchstart',function(e){var t=e.touches[0];tx=t.clientX;ty=t.clientY;tt=true},{passive:true});
-  addEventListener('touchmove',function(e){if(tt)e.preventDefault()},{passive:false});
-  addEventListener('touchend',function(e){if(!tt)return;tt=false;var t=e.changedTouches[0],dx=tx-t.clientX,dy=ty-t.clientY,d=Math.abs(dy)>=Math.abs(dx)?dy:dx;if(Math.abs(d)>36)step(d>0?1:-1)});
-  addEventListener('keydown',function(e){var k=e.key;
-    if(k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||(k===' '&&!e.shiftKey)){e.preventDefault();step(1)}
-    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||(k===' '&&e.shiftKey)){e.preventDefault();step(-1)}
-    else if(k==='Home'){e.preventDefault();go(0)}else if(k==='End'){e.preventDefault();go(snaps.length-1)}});
+  function go(x){scrollTo({top:top0+clamp(x-(x?W*.04:0)),behavior:rm?'auto':'smooth'})}
+  addEventListener('scroll',function(){tgt=clamp(scrollY-top0);if(scrollY>40)hint.classList.add('gone')},{passive:true});
+  // trackpads and shift+wheel scroll sideways: map that to the page scroll
+  addEventListener('wheel',function(e){if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();scrollBy(0,e.deltaX)}},{passive:false});
+  addEventListener('keydown',function(e){if(e.target.closest&&e.target.closest('input,textarea'))return;
+    if(e.key==='ArrowRight'){e.preventDefault();scrollBy({top:W*.6,behavior:rm?'auto':'smooth'})}
+    if(e.key==='ArrowLeft'){e.preventDefault();scrollBy({top:-W*.6,behavior:rm?'auto':'smooth'})}});
   // keyboard focus inside the track should bring that element on screen
-  track.addEventListener('focusin',function(e){var x=offX(e.target);if(x<cur||x>cur+W-80)go(nearest(x-W*.3))});
-  function ease(t){return t<.5?8*t*t*t*t:1-Math.pow(-2*t+2,4)/2}
+  track.addEventListener('focusin',function(e){var x=offX(e.target);if(x<cur||x>cur+W-80)go(x-W*.3)});
 
-  function frame(now){
-    if(busy){var t=DUR?Math.min(1,(now-t0)/DUR):1;cur=from+(to-from)*ease(t);if(t>=1){busy=false;cur=to}}
+  function frame(){
+    cur+=(tgt-cur)*(rm?1:.085);if(Math.abs(tgt-cur)<.05)cur=tgt;
     track.style.transform='translate3d('+(-cur).toFixed(2)+'px,0,0)';
     var v=cur-prev;prev=cur;
-    if(!rm){sk+=(Math.max(-5,Math.min(5,-v*.06))-sk)*.12;track.style.setProperty('--sk',sk.toFixed(3)+'deg');
+    if(!rm){sk+=(Math.max(-5,Math.min(5,-v*.09))-sk)*.12;track.style.setProperty('--sk',sk.toFixed(3)+'deg');
       for(var i=0;i<par.length;i++){var p=par[i],d=p.x-cur-W/2;p.el.style.translate=(-d*p.s).toFixed(1)+'px 0'}}
     for(var j=0;j<rev.length;j++){var r=rev[j];if(!r.el.classList.contains('in')&&r.x-cur<W*.9)r.el.classList.add('in')}
     bar.style.transform='scaleX('+(maxX?cur/maxX:0)+')';
     var ci=0;for(var k=0;k<chs.length;k++)if(chs[k].x<=cur+W*.5)ci=k;
     if(ci!==curCh){curCh=ci;var c=chs[ci];cht.classList.add('sw');setTimeout(function(){chn.textContent=c.n;cht.textContent=c.t;cht.classList.remove('sw')},rm?0:220)}
-    var pr=(cur+W-sx)/(W/2+sw/2),n=Math.round(Math.max(0,Math.min(1,pr))*words.length);
+    var pr=(cur+W*.92-sx)/(W*.62+sw*.5),n=Math.round(Math.max(0,Math.min(1,pr))*words.length);
     for(var q=0;q<words.length;q++)words[q].classList.toggle('on',q<n);
     requestAnimationFrame(frame);
   }
-  measure();
+  measure();cur=tgt;
   var t;function re(){clearTimeout(t);t=setTimeout(measure,80)}
   addEventListener('resize',re);addEventListener('load',measure);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
