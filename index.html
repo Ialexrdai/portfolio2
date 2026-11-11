@@ -12,6 +12,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
+<script>
+// preloader only on the first direct visit: not when coming back from a case page or reloading within the session
+(function(){var skip=false;try{skip=sessionStorage.getItem('preSeen')==='1'}catch(e){}
+  try{if(document.referrer&&new URL(document.referrer).host===location.host)skip=true}catch(e){}
+  if(skip)document.documentElement.classList.add('nopre')})();
+</script>
 <style>
 /* Layout: light page, one bold dark/orange rounded hero, rounded cards on a 12-col grid, orange as the only accent. Deliberately single light look. */
 :root{
@@ -430,7 +436,7 @@ footer{font-size:13px}
 @keyframes preGlitch{0%{transform:translate(-4px,0) skewX(-6deg);text-shadow:4px 0 rgba(255,0,60,.8),-4px 0 rgba(0,220,255,.8)}25%{transform:translate(4px,0);text-shadow:-4px 0 rgba(255,0,60,.8),4px 0 rgba(0,220,255,.8)}50%{transform:translate(-2px,0) skewX(4deg);text-shadow:2px 0 rgba(255,0,60,.6),-2px 0 rgba(0,220,255,.6)}75%,100%{transform:none;text-shadow:none}}
 .pre.out{transform:translateY(-100%);border-radius:0 0 50% 50%/0 0 22% 22%;transition:transform 1s cubic-bezier(.76,0,.24,1),border-radius 1s cubic-bezier(.76,0,.24,1)}
 .pre.out .pre-top,.pre.out .pre-mid,.pre.out .pre-bot,.pre.out .pre-bar{opacity:0;transform:translateY(-40px);transition:opacity .4s,transform .6s cubic-bezier(.7,0,.2,1)}
-.pre.gone{display:none}
+.pre.gone,.nopre .pre{display:none}
 html.loading,html.loading body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pre{display:none}}
 
@@ -812,8 +818,10 @@ body{margin:8px}
 
   // preloader: counter follows real loading (photo, fonts, page), at least 1.8 s, at most 5 s
   var pre=document.getElementById('pre');
-  if(!pre||still){if(pre)pre.classList.add('gone');start()}
+  var skipPre=root.classList.contains('nopre');
+  if(!pre||still||skipPre){if(pre)pre.classList.add('gone');start()}
   else{
+    try{sessionStorage.setItem('preSeen','1')}catch(e){}
     root.classList.add('loading');
     var nEl=document.getElementById('pre-n'), bar=document.getElementById('pre-bar'), glow=pre.querySelector('.pre-glow');
     var heroImg=document.querySelector('.hero-ph'), loaded=0, total=3, shown=0, t0=performance.now(), done=false;
