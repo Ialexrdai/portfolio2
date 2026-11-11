@@ -31,7 +31,7 @@ p{margin:0}
 a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 
 /* ---------- chrome: always readable via difference blend ---------- */
-.chrome{position:fixed;left:0;right:0;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px clamp(16px,3vw,40px);color:#fff;mix-blend-mode:difference;pointer-events:none}
+.chrome{position:fixed;left:0;right:0;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px clamp(16px,3vw,40px);color:#fff;pointer-events:none}
 .chrome a{pointer-events:auto;text-decoration:none}
 .logo{font-weight:800;font-size:20px;letter-spacing:-.03em}
 .logo sup{font-size:13px;margin-left:1px}
@@ -41,11 +41,17 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 .chap-t.sw{opacity:0;transform:translateY(8px)}
 .back{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15px;border:1.5px solid currentColor;border-radius:999px;padding:9px 16px 9px 12px;transition:background .25s,color .25s}
 .back:hover{background:#fff;color:#000}
+/* chrome colour follows the background under each piece (no blend mode: it is costly while the strip moves) */
+.chrome>*{transition:color .3s}
+.chrome .lt{color:var(--ink)}
+.back.lt:hover{background:var(--ink);color:#fff}
+.prog.lt{color:var(--ink)}
+.prog.lt .rail{background:rgba(23,18,15,.18)}.prog.lt .bar,.prog.lt button i{background:var(--ink)}.prog.lt button span{color:var(--ink)}
 .back .ar{display:inline-block;transition:transform .3s var(--ease)}
 .back:hover .ar{transform:translateX(-4px)}
 @media (max-width:700px){.chap{display:none}.back{padding:7px 13px 7px 10px;font-size:14px}}
 
-.prog{position:fixed;left:clamp(16px,3vw,40px);right:clamp(16px,3vw,40px);bottom:22px;height:22px;z-index:50;mix-blend-mode:difference;color:#fff}
+.prog{position:fixed;left:clamp(16px,3vw,40px);right:clamp(16px,3vw,40px);bottom:22px;height:22px;z-index:50;color:#fff}
 .prog .rail{position:absolute;left:0;right:0;top:10px;height:2px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden}
 .prog .bar{position:absolute;inset:0;background:#fff;transform-origin:0 50%;transform:scaleX(0)}
 .prog button{position:absolute;top:0;width:22px;height:22px;margin-left:-11px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center}
@@ -136,10 +142,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 .screen img{width:100%;height:auto}
 .island{position:absolute;left:50%;top:5.8cqw;transform:translate(-50%,-50%);width:30cqw;height:8.6cqw;background:#000;border-radius:999px;z-index:1}
 .ph:hover .devfull{translate:0 -12px}
-.pop{position:absolute;left:6.3%;top:17.81%;width:33.44%;height:auto;z-index:2;transform:scale(1.55);transform-origin:100% 20%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.14)) drop-shadow(0 22px 36px rgba(0,0,0,.22))}
-.pop.p2{left:9.67%;top:12.54%;width:81.57%;transform:translateY(-9%) scale(1.3);transform-origin:12% 10%;filter:drop-shadow(0 8px 14px rgba(0,30,40,.16)) drop-shadow(0 26px 40px rgba(0,30,40,.26))}
-.pop.p3{left:9.2%;top:35.03%;width:82.22%;transform:scale(1.3);transform-origin:88% 50%;filter:drop-shadow(0 8px 14px rgba(0,60,70,.22)) drop-shadow(0 26px 40px rgba(0,60,70,.3))}
-.pop.kc{left:9.37%;width:81.68%;transform:scale(1.27);transform-origin:0 50%;filter:drop-shadow(0 6px 10px rgba(0,30,40,.12)) drop-shadow(0 20px 34px rgba(0,30,40,.2))}
+.pop{position:absolute;left:6.3%;top:17.81%;width:33.44%;height:auto;z-index:2;transform:scale(1.55);transform-origin:100% 20%;filter:drop-shadow(0 22px 36px rgba(0,0,0,.22))}
+.pop.p2{left:9.67%;top:12.54%;width:81.57%;transform:translateY(-9%) scale(1.3);transform-origin:12% 10%;filter:drop-shadow(0 26px 40px rgba(0,30,40,.26))}
+.pop.p3{left:9.2%;top:35.03%;width:82.22%;transform:scale(1.3);transform-origin:88% 50%;filter:drop-shadow(0 26px 40px rgba(0,60,70,.3))}
+.pop.kc{left:9.37%;width:81.68%;transform:scale(1.27);transform-origin:0 50%;filter:drop-shadow(0 20px 34px rgba(0,30,40,.2))}
 .pop.k1{top:35.4%}.pop.k2{top:53.9%;z-index:3}.pop.k3{top:72.4%;z-index:4}
 .js .pop{opacity:0;translate:0 28px;transition:opacity .8s var(--ease),translate 1s var(--ease);transition-delay:calc(var(--d,0s) + .55s)}
 .js .in .pop{opacity:1;translate:0 0}
@@ -148,10 +154,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 
 /* form + snippets */
 .formcard{margin:0 0 0 calc(var(--pw)*-.42);z-index:3;width:calc(var(--pw)*1.1);flex:none;align-self:center;translate:0 12vh}
-.formcard img{width:100%;height:auto;filter:drop-shadow(0 26px 26px rgba(0,30,40,.2)) drop-shadow(0 10px 10px rgba(0,30,40,.08))}
+.formcard img{width:100%;height:auto;filter:drop-shadow(0 10px 10px rgba(0,30,40,.08))}
 .snips{margin:0;flex:none;display:flex;gap:16px;padding:18px;border-radius:28px;background:linear-gradient(180deg,#e3eeef,#d6e6e8);width:min(80vh,80svh,88vw)}
 .snips div{flex:1;display:flex;flex-direction:column;gap:16px}
-.snips img{width:100%;height:auto;filter:drop-shadow(0 2px 3px rgba(0,40,50,.08)) drop-shadow(0 12px 22px rgba(0,40,50,.14))}
+.snips img{width:100%;height:auto;filter:drop-shadow(0 12px 22px rgba(0,40,50,.14))}
 .snips img:nth-child(2){margin-left:8%;width:92%}
 
 /* finances */
@@ -422,6 +428,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
     par=[].map.call(track.querySelectorAll('[data-speed]'),function(el){return{el:el,x:offX(el)+el.offsetWidth/2,s:+el.dataset.speed}});
     rev=[].map.call(track.querySelectorAll('.rx'),function(el){return{el:el,x:offX(el)}});
     chs=[].map.call(track.querySelectorAll('[data-ch]'),function(el){return{x:offX(el),t:el.dataset.ch,n:el.dataset.n}});
+    darks=[].map.call(track.querySelectorAll('.zone.dark'),function(z){var x=offX(z);return[x,x+z.offsetWidth]});
     sx=offX(stmt);sw=stmt.offsetWidth;
     prog.querySelectorAll('button').forEach(function(b){b.remove()});
     chs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.style.left=(maxX?Math.min(c.x/maxX,1)*100:0)+'%';b.innerHTML='<i></i><span>'+c.n+' '+c.t+'</span>';b.setAttribute('aria-label',c.t);
@@ -439,7 +446,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   // keyboard focus inside the track should bring that element on screen
   track.addEventListener('focusin',function(e){var x=offX(e.target);if(x<cur||x>cur+W-80)go(x-W*.3)});
 
-  var dirty=true,lastN=-1;
+  var dirty=true,lastN=-1,darks=[];
+  var cParts=[[document.querySelector('.logo'),function(){return 60}],[document.querySelector('.chap'),function(){return W/2}],[document.querySelector('.back'),function(){return W-90}],[prog,function(){return W/2}]];
+  function isDark(x){x+=cur;for(var i=0;i<darks.length;i++)if(x>=darks[i][0]&&x<darks[i][1])return true;return false}
   function frame(){
     cur+=(tgt-cur)*(rm?1:.14);if(Math.abs(tgt-cur)<.05)cur=tgt;
     // nothing moved since the last frame: skip all the writes
@@ -448,6 +457,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
     if(!rm){for(var i=0;i<par.length;i++){var p=par[i],d=p.x-cur-W/2;if(Math.abs(d)>W*1.6)continue;p.el.style.translate=(-d*p.s).toFixed(1)+'px 0'}}
     for(var j=0;j<rev.length;j++){var r=rev[j];if(!r.el.classList.contains('in')&&r.x-cur<W*.9)r.el.classList.add('in')}
     bar.style.transform='scaleX('+(maxX?cur/maxX:0)+')';
+    for(var e=0;e<cParts.length;e++){var cp=cParts[e];if(cp[0])cp[0].classList.toggle('lt',!isDark(cp[1]()))}
     var ci=0;for(var k=0;k<chs.length;k++)if(chs[k].x<=cur+W*.5)ci=k;
     if(ci!==curCh){curCh=ci;var c=chs[ci];cht.classList.add('sw');setTimeout(function(){chn.textContent=c.n;cht.textContent=c.t;cht.classList.remove('sw')},rm?0:220)}
     var pr=(cur+W*.92-sx)/(W*.62+sw*.5),n=Math.round(Math.max(0,Math.min(1,pr))*words.length);
@@ -461,6 +471,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   [].forEach.call(document.images,function(im){if(!im.complete)im.addEventListener('load',re)});
   requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.add('ready')})});
   requestAnimationFrame(frame);
+  // decode every picture up front so none is decoded mid-scroll
+  addEventListener('load',function(){[].forEach.call(document.images,function(im){im.loading='eager';if(im.decode)im.decode().catch(function(){})})});
   // coming back from the home page with the browser's back button
   addEventListener('pageshow',function(e){if(e.persisted){measure();root.classList.add('ready')}});
 
