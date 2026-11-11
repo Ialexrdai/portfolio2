@@ -464,6 +464,9 @@ body{margin:8px}
 .smoke,.stars{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:60}
 .stars{z-index:61}
 .gl-on .cs-pic img{opacity:0}
+.cs-tip{position:fixed;left:0;top:0;z-index:62;pointer-events:none;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font:600 14px/1 var(--font);white-space:nowrap;box-shadow:0 10px 30px -8px rgba(255,90,20,.6);opacity:0;scale:.4;transition:opacity .25s,scale .45s cubic-bezier(.16,1,.3,1);will-change:transform}
+.cs-tip.on{opacity:1;scale:1}
+.cs-tip.soon{background:#fbf7f4;color:#17120f;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
 .gl-on .cs-pic{background:transparent}
 .sw{display:inline-block;will-change:transform,filter}
 @media (prefers-reduced-motion:reduce){.smoke{display:none}}
@@ -1131,6 +1134,24 @@ body{margin:8px}
     });
   });
   addEventListener('pageshow',function(e){if(e.persisted)document.querySelectorAll('.cs-sheet').forEach(function(d){d.remove()})});
+})();
+</script>
+<script>
+// label that follows the cursor over case cards
+(function(){
+  if(!matchMedia('(pointer:fine)').matches)return;
+  var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var t=document.createElement('div');t.className='cs-tip';t.setAttribute('aria-hidden','true');document.body.appendChild(t);
+  var x=0,y=0,tx=0,ty=0,run=false;
+  function tick(){x+=(tx-x)*(rm?1:.22);y+=(ty-y)*(rm?1:.22);t.style.transform='translate3d('+(x+18).toFixed(1)+'px,'+(y+18).toFixed(1)+'px,0)';
+    if(Math.abs(tx-x)>.1||Math.abs(ty-y)>.1)requestAnimationFrame(tick);else run=false}
+  document.querySelectorAll('a.cs').forEach(function(a){
+    var page=/\.html$/.test(a.getAttribute('href'));
+    a.addEventListener('pointerenter',function(e){t.textContent=page?'Смотреть кейс':'Скоро будет';t.classList.toggle('soon',!page);x=tx=e.clientX;y=ty=e.clientY;tick();t.classList.add('on')});
+    a.addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY;if(!run){run=true;requestAnimationFrame(tick)}});
+    a.addEventListener('pointerleave',function(){t.classList.remove('on')});
+    a.addEventListener('click',function(){t.classList.remove('on')});
+  });
 })();
 </script>
 
