@@ -62,8 +62,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 .dark{background:var(--coal);color:var(--on-dark)}
 .pn{flex:none;height:100%;display:flex;align-items:center;padding-inline:clamp(28px,4.5vw,80px)}
 .fade{flex:none;width:clamp(160px,32vw,520px);height:100%}
-.fade.d2l{background:linear-gradient(90deg,var(--coal),#3b3633 22%,#bdb6b0 62%,var(--mist))}
-.fade.l2d{background:linear-gradient(90deg,var(--mist),#bdb6b0 38%,#3b3633 78%,var(--coal))}
+.zone.dark>.pn:last-child{padding-right:clamp(48px,8vw,140px)}
 
 /* reveal */
 .js .rx{opacity:0;transform:translateY(54px);transition:opacity 1s var(--ease),transform 1.2s var(--ease);transition-delay:var(--d,0s)}
@@ -242,7 +241,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
       </div>
     </section>
   </div>
-  <div class="fade d2l" aria-hidden="true"></div>
 
   <!-- 01 Dashboard -->
   <section class="pn ch" data-ch="Дашборд" data-n="01" aria-labelledby="c1">
@@ -357,7 +355,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
     <figure class="site rx" data-speed="-.06"><img class="sk" src="img/voda-site.jpg" width="1760" height="1320" alt="Сайт клининговой компании Вода на ноутбуке" loading="lazy"></figure>
   </section>
 
-  <div class="fade l2d" aria-hidden="true"></div>
   <div class="zone dark">
     <section class="pn" data-ch="Итог" data-n="06" aria-label="Итог">
       <p class="stmt" id="stmt">Менеджеру больше не нужно сверять календарь, переписки и Excel. <span class="hl">Расписание, клиенты и все цифры</span> в одном окне, а <span class="hl">зарплата клинеров считается автоматически</span>.</p>
