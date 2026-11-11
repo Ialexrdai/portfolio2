@@ -113,7 +113,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 .bf.sol em{color:var(--accent)}
 
 /* ---------- chapters ---------- */
-.ch{position:relative}
+.ch{position:relative;padding-right:clamp(16px,2.5vw,40px)}
 .ch-num{position:absolute;left:clamp(10px,2vw,30px);top:50%;margin-top:-.56em;font-size:min(56vh,56svh,70vw);font-weight:700;letter-spacing:-.08em;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(23,18,15,.06);pointer-events:none;user-select:none;z-index:0}
 .ch-head{position:relative;z-index:1;width:min(860px,84vw)}
 .ch-k{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:18px;font-weight:600}
@@ -352,10 +352,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   <!-- 04 Finance -->
   <section class="pn ch" data-ch="Финансы" data-n="04" aria-labelledby="c4">
     <span class="ch-num" data-speed=".35" aria-hidden="true">04</span>
-    <div class="ch-head">
+    <div class="ch-head" style="width:min(560px,84vw)">
       <span class="ch-k rx">Деньги без Excel</span>
       <h2 class="ch-ttl rx" id="c4" style="--d:.05s">Финансы</h2>
-      <div class="pts one" style="max-width:560px">
+      <div class="pts one">
         <p class="rx" style="--d:.1s"><b>Зарплаты</b>Зарплата клинеров <em>считается автоматически</em>: 40% от суммы заказа, поровну между всеми, кто был на заказе. Видно число выполненных заказов и сумму к выплате.</p>
         <p class="rx" style="--d:.18s"><b>Доходы</b>Лента всех оплаченных заказов: дата, клиент, кто убирал и сколько пришло.</p>
         <p class="rx" style="--d:.26s"><b>Расходы</b>Начисления клинерам попадают в расходы сами, с пометкой «авто». Любую запись можно <em>поправить вручную</em>.</p>
