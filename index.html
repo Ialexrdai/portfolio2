@@ -592,7 +592,7 @@ body{margin:8px}
       <p class="tasks-intro"><span class="rv">По каждому проекту коротко рассказываю, какая стояла задача, что я сделал и почему выбрал именно такое решение.</span></p>
     </div>
     <div class="cs-grid">
-      <a class="cs" href="#cases">
+      <a class="cs" href="voda.html">
         <div class="cs-pic"><img src="img/voda-laptop.jpg" alt="CRM клининг-сервиса «Вода» на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">CRM<i>-</i>Клининг<i>-</i>Финансы</div>
         <h3>Клининг-сервис «Вода»</h3>
@@ -1113,6 +1113,24 @@ body{margin:8px}
     smearText(dt);
     requestAnimationFrame(loop)}
   requestAnimationFrame(loop);
+})();
+</script>
+<script>
+// case cards with their own page: the card's picture grows into a dark sheet, then the case page opens
+(function(){
+  var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('a.cs[href$=".html"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0||rm||!Element.prototype.animate)return;
+      e.preventDefault();
+      var r=a.querySelector('.cs-pic').getBoundingClientRect(),d=document.createElement('div');
+      d.className='cs-sheet';d.style.cssText='position:fixed;z-index:200;background:#0e0c0b;pointer-events:none;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;border-radius:24px';
+      document.body.appendChild(d);
+      d.animate([{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'24px',opacity:.6},{left:'0px',top:'0px',width:innerWidth+'px',height:innerHeight+'px',borderRadius:'0px',opacity:1}],{duration:700,easing:'cubic-bezier(.7,0,.2,1)',fill:'forwards'})
+        .onfinish=function(){location.href=a.href};
+    });
+  });
+  addEventListener('pageshow',function(e){if(e.persisted)document.querySelectorAll('.cs-sheet').forEach(function(d){d.remove()})});
 })();
 </script>
 

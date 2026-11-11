@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Клининг-сервис «Вода» — кейс · Алексей Сухоплеска</title>
+<meta name="description" content="Кейс: CRM для клининговой компании «Вода». Дашборд, расписание, база клиентов, финансы и автоматический расчёт зарплаты клинеров.">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --paper:#ffffff;--mist:#f4f2f0;--line:#e8e4e0;--ink:#17120f;--muted:#716a64;
+  --accent:#ff5a14;--on-dark:#fbf7f4;--coal:#0e0c0b;--teal:#0f9aa0;
+  --font:"Onest",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --r-lg:24px;
+  --pw:min(29vh,29svh,58vw);
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--coal);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:none;display:block}
+a{color:inherit}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.04em;line-height:1}
+p{margin:0}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* ---------- chrome: always readable via difference blend ---------- */
+.chrome{position:fixed;left:0;right:0;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px clamp(16px,3vw,40px);color:#fff;mix-blend-mode:difference;pointer-events:none}
+.chrome a{pointer-events:auto;text-decoration:none}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.03em}
+.logo sup{font-size:13px;margin-left:1px}
+.chap{display:flex;gap:12px;align-items:baseline;font-size:14px;font-weight:500;letter-spacing:.01em}
+.chap-n{font-variant-numeric:tabular-nums;opacity:.6}
+.chap-t{display:inline-block;transition:opacity .35s,transform .35s var(--ease)}
+.chap-t.sw{opacity:0;transform:translateY(8px)}
+.back{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:15px;border:1.5px solid currentColor;border-radius:999px;padding:9px 16px 9px 12px;transition:background .25s,color .25s}
+.back:hover{background:#fff;color:#000}
+.back .ar{display:inline-block;transition:transform .3s var(--ease)}
+.back:hover .ar{transform:translateX(-4px)}
+@media (max-width:700px){.chap{display:none}.back{padding:7px 13px 7px 10px;font-size:14px}}
+
+.prog{position:fixed;left:clamp(16px,3vw,40px);right:clamp(16px,3vw,40px);bottom:22px;height:22px;z-index:50;mix-blend-mode:difference;color:#fff}
+.prog .rail{position:absolute;left:0;right:0;top:10px;height:2px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden}
+.prog .bar{position:absolute;inset:0;background:#fff;transform-origin:0 50%;transform:scaleX(0)}
+.prog button{position:absolute;top:0;width:22px;height:22px;margin-left:-11px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center}
+.prog button i{width:8px;height:8px;border-radius:50%;background:#fff;transition:transform .3s var(--ease)}
+.prog button:hover i{transform:scale(1.6)}
+.prog button span{position:absolute;bottom:22px;left:50%;translate:-50% 0;white-space:nowrap;font:500 12px/1 var(--font);color:#fff;opacity:0;transition:opacity .25s,translate .25s;pointer-events:none}
+.prog button:hover span,.prog button:focus-visible span{opacity:1;translate:-50% -3px}
+
+/* ---------- horizontal scroller ---------- */
+.hs-pin{height:100vh;height:100svh;overflow-x:auto;overflow-y:hidden}
+.js .hs-pin{position:sticky;top:0;overflow:hidden}
+.track{position:relative;display:flex;height:100%;width:max-content;will-change:transform;background:var(--mist)}
+.zone{display:flex;height:100%;flex:none}
+.dark{background:var(--coal);color:var(--on-dark)}
+.pn{flex:none;height:100%;display:flex;align-items:center;padding-inline:clamp(28px,4.5vw,80px)}
+.fade{flex:none;width:clamp(160px,32vw,520px);height:100%}
+.fade.d2l{background:linear-gradient(90deg,var(--coal),#3b3633 22%,#bdb6b0 62%,var(--mist))}
+.fade.l2d{background:linear-gradient(90deg,var(--mist),#bdb6b0 38%,#3b3633 78%,var(--coal))}
+
+/* reveal */
+.js .rx{opacity:0;transform:translateY(54px);transition:opacity 1s var(--ease),transform 1.2s var(--ease);transition-delay:var(--d,0s)}
+.js .rx.in{opacity:1;transform:none}
+.sk{transform:skewX(var(--sk,0deg))}
+
+/* ---------- intro ---------- */
+.intro{position:relative;gap:clamp(32px,5vw,90px);padding-left:clamp(16px,8vw,116px);padding-right:clamp(40px,6vw,100px)}
+.intro-txt{width:min(640px,84vw)}
+.tags{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:500;color:rgba(251,247,244,.62);margin-bottom:26px}
+.tags i{font-style:normal;color:var(--accent)}
+.ttl{font-size:clamp(46px,min(11vh,8.2vw),148px);font-weight:500;letter-spacing:-.055em;line-height:.94}
+.ln{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.ln>span{display:inline-block;transform:translateY(105%);transition:transform 1.3s var(--ease)}
+.ready .ln>span{transform:none}
+.ln:nth-child(2)>span{transition-delay:.12s}
+.ttl em{font-style:normal;color:var(--accent)}
+.sub{margin-top:28px;font-size:clamp(17px,1.5vw,21px);line-height:1.4;max-width:30ch;color:rgba(251,247,244,.8);opacity:0;transform:translateY(20px);transition:opacity 1s .45s,transform 1.2s .45s var(--ease)}
+.meta{display:flex;gap:clamp(22px,3vw,48px);margin:40px 0 0;opacity:0;transition:opacity 1s .65s}
+.ready .sub,.ready .meta{opacity:1;transform:none}
+.meta div{border-top:1px solid rgba(251,247,244,.2);padding-top:12px;min-width:90px}
+.meta dt{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:rgba(251,247,244,.5);margin-bottom:6px}
+.meta dd{margin:0;font-weight:500}
+.intro-pic{position:relative;margin:0;height:min(62vh,62svh,58vw*.65);aspect-ratio:1199/781;border-radius:var(--r-lg);overflow:hidden;clip-path:inset(0 0 0 100% round var(--r-lg));transition:clip-path 1.6s .2s cubic-bezier(.7,0,.15,1)}
+.ready .intro-pic{clip-path:inset(0 0 0 0 round var(--r-lg))}
+.intro-pic img{width:100%;height:100%;object-fit:cover;scale:1.25;transition:scale 2.2s .2s var(--ease)}
+.ready .intro-pic img{scale:1}
+.intro-pic::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 50%,rgba(255,90,20,.0),rgba(14,12,11,.25))}
+.hint{position:absolute;left:clamp(16px,8vw,116px);bottom:64px;display:flex;align-items:center;gap:14px;font-size:14px;color:rgba(251,247,244,.6);transition:opacity .5s}
+.hint .ar{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(251,247,244,.35);display:grid;place-items:center;color:#fff;animation:nudge 1.8s var(--ease) infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+.hint.gone{opacity:0}
+
+/* brief */
+.brief{gap:clamp(36px,5vw,90px);align-items:center}
+.bf{width:min(400px,78vw);border-top:1px solid rgba(251,247,244,.18);padding-top:22px}
+.bf .k{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:22px}
+.bf .k span:last-child{color:rgba(251,247,244,.4);font-variant-numeric:tabular-nums}
+.bf p{font-size:clamp(19px,min(2.7vh,1.8vw),25px);line-height:1.32;letter-spacing:-.015em;color:rgba(251,247,244,.55)}
+.bf em{font-style:normal;color:var(--on-dark)}
+.bf.sol p{color:var(--on-dark)}
+.bf.sol em{color:var(--accent)}
+
+/* ---------- chapters ---------- */
+.ch{position:relative}
+.ch-num{position:absolute;left:clamp(10px,2vw,30px);top:50%;margin-top:-.56em;font-size:min(56vh,56svh,70vw);font-weight:700;letter-spacing:-.08em;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(23,18,15,.09);pointer-events:none;user-select:none;z-index:0}
+.ch-head{position:relative;z-index:1;width:min(860px,84vw)}
+.ch-k{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:18px;font-weight:600}
+.ch-ttl{font-size:clamp(38px,min(8vh,6vw),96px);font-weight:500;letter-spacing:-.05em;line-height:.95;margin-bottom:clamp(28px,5vh,56px)}
+.pts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3.6vh,36px) clamp(24px,3vw,48px)}
+.pts p{border-top:1px solid rgba(23,18,15,.14);padding-top:14px;font-size:clamp(15px,min(2.05vh,1.25vw),17.5px);line-height:1.5;color:var(--muted)}
+.pts b{display:block;color:var(--ink);font-weight:600;font-size:1.06em;margin-bottom:6px}
+.pts em{font-style:normal;color:var(--ink);font-weight:500}
+.pts.one{grid-template-columns:1fr}
+@media (max-width:700px){.pts{grid-template-columns:1fr}.pts p{font-size:14.5px;line-height:1.45}.ch-ttl{margin-bottom:22px}}
+@media (max-height:620px) and (min-width:701px){.pts p{font-size:14px}}
+
+.mon{margin:0;height:min(84vh,84svh,110vw*.668);aspect-ratio:2400/1603;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 40px 80px -40px rgba(23,18,15,.45)}
+.mon img{width:100%;height:100%;object-fit:cover}
+.cap{position:absolute;left:24px;bottom:22px;font-size:13px;font-weight:500;color:#fff;background:rgba(14,12,11,.55);backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px}
+.fig{position:relative}
+
+/* phones */
+.phones{display:flex;align-items:center;gap:calc(var(--pw)*.32)}
+.ph{position:relative;margin:0;width:var(--pw);flex:none}
+.ph.up{margin-top:-9vh}.ph.dn{margin-top:9vh}
+.devfull{position:relative;width:100%;border-radius:14%/6.5%;background:#0d0d0e;padding:3.5%;box-shadow:0 0 0 1.5px #4a4a4e,0 2px 4px rgba(0,0,0,.06),0 18px 36px -10px rgba(0,0,0,.28),0 48px 80px -28px rgba(0,0,0,.35);transition:translate .6s var(--ease)}
+.devfull::before,.devfull::after{content:"";position:absolute;left:-2.4%;width:1.6%;background:#2a2a2d;border-radius:3px 0 0 3px}
+.devfull::before{top:16%;height:8%}.devfull::after{top:27%;height:8%}
+.screen{position:relative;container-type:inline-size;border-radius:11%/5.1%;overflow:hidden;background:#1f1f21}
+.screen img{width:100%;height:auto}
+.island{position:absolute;left:50%;top:5.8cqw;transform:translate(-50%,-50%);width:30cqw;height:8.6cqw;background:#000;border-radius:999px;z-index:1}
+.ph:hover .devfull{translate:0 -12px}
+.pop{position:absolute;left:6.3%;top:17.81%;width:33.44%;height:auto;z-index:2;transform:scale(1.55);transform-origin:100% 20%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.14)) drop-shadow(0 22px 36px rgba(0,0,0,.22))}
+.pop.p2{left:9.67%;top:12.54%;width:81.57%;transform:translateY(-9%) scale(1.3);transform-origin:12% 10%;filter:drop-shadow(0 8px 14px rgba(0,30,40,.16)) drop-shadow(0 26px 40px rgba(0,30,40,.26))}
+.pop.p3{left:9.2%;top:35.03%;width:82.22%;transform:scale(1.3);transform-origin:88% 50%;filter:drop-shadow(0 8px 14px rgba(0,60,70,.22)) drop-shadow(0 26px 40px rgba(0,60,70,.3))}
+.pop.kc{left:9.37%;width:81.68%;transform:scale(1.27);transform-origin:0 50%;filter:drop-shadow(0 6px 10px rgba(0,30,40,.12)) drop-shadow(0 20px 34px rgba(0,30,40,.2))}
+.pop.k1{top:35.4%}.pop.k2{top:53.9%;z-index:3}.pop.k3{top:72.4%;z-index:4}
+.js .pop{opacity:0;translate:0 28px;transition:opacity .8s var(--ease),translate 1s var(--ease);transition-delay:calc(var(--d,0s) + .55s)}
+.js .in .pop{opacity:1;translate:0 0}
+.js .in .pop.k2{transition-delay:calc(var(--d,0s) + .7s)}.js .in .pop.k3{transition-delay:calc(var(--d,0s) + .85s)}
+.phones.wide-l .ph:first-child{margin-right:calc(var(--pw)*.08)}
+
+/* form + snippets */
+.formcard{margin:0 0 0 calc(var(--pw)*-.42);z-index:3;width:calc(var(--pw)*1.1);flex:none;align-self:center;translate:0 12vh}
+.formcard img{width:100%;height:auto;filter:drop-shadow(0 26px 26px rgba(0,30,40,.2)) drop-shadow(0 10px 10px rgba(0,30,40,.08))}
+.snips{margin:0;flex:none;display:flex;gap:16px;padding:18px;border-radius:28px;background:linear-gradient(180deg,#e3eeef,#d6e6e8);width:min(80vh,80svh,88vw)}
+.snips div{flex:1;display:flex;flex-direction:column;gap:16px}
+.snips img{width:100%;height:auto;filter:drop-shadow(0 2px 3px rgba(0,40,50,.08)) drop-shadow(0 12px 22px rgba(0,40,50,.14))}
+.snips img:nth-child(2){margin-left:8%;width:92%}
+
+/* finances */
+.fin{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:18px;width:min(96vh,96svh,140vw);flex:none}
+.fin img{width:100%;height:auto;border-radius:14px;filter:drop-shadow(0 12px 28px rgba(20,40,45,.1))}
+.fin img:first-child{grid-column:1/-1}
+
+.site{margin:0;border-radius:var(--r-lg);overflow:hidden;height:min(80vh,80svh,100vw*.75);aspect-ratio:1760/1320}
+.site img{width:100%;height:100%;object-fit:contain}
+.ilink{display:inline-flex;align-items:center;gap:10px;margin-top:26px;padding:12px 14px 12px 20px;border-radius:999px;background:var(--ink);color:var(--on-dark);text-decoration:none;font-weight:600;font-size:15px}
+.ilink .ar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;transition:transform .3s var(--ease)}
+.ilink:hover .ar{transform:rotate(-45deg)}
+
+/* ---------- outro ---------- */
+.stmt{width:min(1120px,88vw);font-size:clamp(28px,min(6.4vh,4.6vw),76px);font-weight:500;letter-spacing:-.045em;line-height:1.06}
+.stmt .w{color:rgba(251,247,244,.16);transition:color .5s}
+.stmt .w.on{color:var(--on-dark)}
+.stmt .w.on.hl{color:var(--accent)}
+.more{width:min(1000px,88vw)}
+.more h2{font-size:clamp(34px,min(7vh,5vw),80px);font-weight:500;letter-spacing:-.05em;margin-bottom:34px}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mc{text-decoration:none;display:block}
+.mc .pic{border-radius:18px;overflow:hidden;aspect-ratio:16/10;background:#171311}
+.mc img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.mc:hover img{transform:scale(1.05)}
+.mc h3{font-size:18px;font-weight:600;letter-spacing:-.02em;margin-top:14px}
+.mc p{font-size:14px;color:rgba(251,247,244,.55);margin-top:4px}
+.home{display:inline-flex;align-items:center;gap:12px;margin-top:40px;padding:6px 6px 6px 22px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:15px}
+.home .ar{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--accent);display:grid;place-items:center;transition:transform .3s var(--ease)}
+.home:hover .ar{transform:translateX(-4px)}
+@media (max-width:700px){.mgrid{grid-template-columns:1fr 1fr}.mgrid .mc:nth-child(3){display:none}}
+
+/* entrance veil (matches the card transition on the home page) */
+.veil{position:fixed;inset:0;background:var(--coal);z-index:80;pointer-events:none;animation:veil .9s .05s var(--ease) forwards}
+@keyframes veil{to{opacity:0;visibility:hidden}}
+
+.stars{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:61}
+
+@media (prefers-reduced-motion:reduce){
+  .js .rx{opacity:1!important;transform:none;transition:none}
+  .js .pop{opacity:1;translate:none;transition:none}
+  .ln>span,.sub,.meta,.intro-pic,.intro-pic img{transition:none!important}
+  .hint .ar{animation:none}.veil{animation-duration:.01s}
+}
+</style>
+</head>
+<body>
+<div class="veil" aria-hidden="true"></div>
+<header class="chrome">
+  <a class="logo" href="index.html">ialexrd<sup>●</sup></a>
+  <div class="chap" aria-live="polite"><span class="chap-n" id="chn">00</span><span class="chap-t" id="cht">О проекте</span></div>
+  <a class="back" href="index.html#cases"><span class="ar" aria-hidden="true">←</span>Все кейсы</a>
+</header>
+
+<main class="hs" id="hs">
+<div class="hs-pin" id="pin">
+<div class="track" id="track">
+
+  <div class="zone dark">
+    <section class="pn intro" data-ch="О проекте" data-n="00" aria-labelledby="t">
+      <div class="intro-txt">
+        <div class="tags">CRM<i>-</i>Клининг<i>-</i>Финансы</div>
+        <h1 class="ttl" id="t"><span class="ln"><span>Клининг-сервис</span></span><span class="ln"><span><em>«Вода»</em></span></span></h1>
+        <p class="sub">CRM для клининговой компании: расписание, клиенты и все цифры в одном окне, а зарплата клинеров считается сама.</p>
+        <dl class="meta">
+          <div><dt>Формат</dt><dd>Веб-приложение</dd></div>
+          <div><dt>Клиент</dt><dd>Вода</dd></div>
+          <div><dt>Год</dt><dd>2026</dd></div>
+        </dl>
+      </div>
+      <figure class="intro-pic" data-speed="-.12"><img class="sk" src="img/voda-laptop.jpg" width="1199" height="781" alt="CRM клининг-сервиса «Вода» на ноутбуке"></figure>
+      <p class="hint" id="hint"><span class="ar" aria-hidden="true">→</span>Листайте вниз, кейс поедет вбок</p>
+    </section>
+
+    <section class="pn brief" aria-label="Проблема, задача и решение">
+      <div class="bf rx">
+        <div class="k"><span>Проблема</span><span>01</span></div>
+        <p>Компания <em>давно переросла запись в календаре телефона, переписках с менеджером и таблицах Excel</em>. Пробовали подключить CRM от крупных разработчиков, но не подошли ни сроки внедрения, ни стоимость, ни функционал.</p>
+      </div>
+      <div class="bf rx" style="--d:.1s">
+        <div class="k"><span>Задача</span><span>02</span></div>
+        <p>Создать <em>веб-приложение для записи клиентов и ведения клиентской базы</em> с полной историей работы по каждому клиенту: суммами, заметками и фотографиями объектов. Отдельно нужен был <em>автоматический расчёт зарплаты клинеров</em>.</p>
+      </div>
+      <div class="bf sol rx" style="--d:.2s">
+        <div class="k"><span>Решение</span><span>03</span></div>
+        <p>Разработал веб-приложение с приятным и понятным интерфейсом, в котором есть <em>весь функционал, нужный заказчику</em>.</p>
+      </div>
+    </section>
+  </div>
+  <div class="fade d2l" aria-hidden="true"></div>
+
+  <!-- 01 Dashboard -->
+  <section class="pn ch" data-ch="Дашборд" data-n="01" aria-labelledby="c1">
+    <span class="ch-num" data-speed=".35" aria-hidden="true">01</span>
+    <div class="ch-head">
+      <span class="ch-k rx">Главная страница</span>
+      <h2 class="ch-ttl rx" id="c1" style="--d:.05s">Дашборд</h2>
+      <div class="pts">
+        <p class="rx" style="--d:.1s"><b>Сводка</b>На главной сразу видно <em>доход, расходы, чистую прибыль и новых клиентов</em>. Рядом с каждой цифрой стоит изменение в процентах и <em>сравнение с прошлым периодом</em>.</p>
+        <p class="rx" style="--d:.18s"><b>Период</b>Сводку можно посмотреть <em>за этот или прошлый месяц, год или свой период</em>. Оттуда же можно быстро перейти в расписание или создать новый заказ.</p>
+        <p class="rx" style="--d:.26s"><b>Аналитика</b>График показывает <em>доходы и расходы за последние полгода</em>. Ниже динамика роста, количество выполненных заказов и <em>средний чек</em>.</p>
+        <p class="rx" style="--d:.34s"><b>Заказы</b>Внизу список <em>ближайших заказов на неделю вперёд</em> с суммой и статусом. Отменённые заказы <em>можно восстановить с новой датой и суммой</em>.</p>
+      </div>
+    </div>
+  </section>
+  <section class="pn" aria-label="Дашборд на мониторе">
+    <figure class="mon fig rx"><img class="sk" src="img/voda-monitor.jpg" width="2400" height="1603" alt="Дашборд CRM клининг-сервиса Вода на мониторе" loading="lazy"><figcaption class="cap">Дашборд на десктопе</figcaption></figure>
+  </section>
+  <section class="pn" aria-label="Дашборд на телефоне">
+    <div class="phones">
+      <figure class="ph up rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m1.jpg" width="591" height="1280" alt="Дашборд со сводкой по компании" loading="lazy"></div><img class="pop p3" src="img/voda-pop3.png" alt="" loading="lazy"></div></figure>
+      <figure class="ph dn rx" data-speed="-.04" style="--d:.08s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m4.jpg" width="591" height="1280" alt="Выбор периода на дашборде" loading="lazy"></div><img class="pop" src="img/voda-pop.png" alt="" loading="lazy"></div></figure>
+      <figure class="ph up rx" data-speed=".06" style="--d:.16s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m2.jpg" width="591" height="1280" alt="График доходов и расходов и динамика" loading="lazy"></div><img class="pop p2" src="img/voda-pop2.png" alt="" loading="lazy"></div></figure>
+      <figure class="ph dn rx" data-speed="-.03" style="--d:.24s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-m3.jpg" width="591" height="1280" alt="Ближайшие и отменённые заказы, данные клиентов вымышленные" loading="lazy"></div></div></figure>
+    </div>
+  </section>
+
+  <!-- 02 Schedule -->
+  <section class="pn ch" data-ch="Расписание" data-n="02" aria-labelledby="c2">
+    <span class="ch-num" data-speed=".35" aria-hidden="true">02</span>
+    <div class="ch-head">
+      <span class="ch-k rx">Заказы и календарь</span>
+      <h2 class="ch-ttl rx" id="c2" style="--d:.05s">Расписание</h2>
+      <div class="pts">
+        <p class="rx" style="--d:.1s"><b>Календарь</b>Расписание собрано в <em>календарь на месяц</em>. Под каждым днём стоят точки заказов, поэтому <em>загрузку видно с одного взгляда</em>. В календаре видны и повторяющиеся заказы.</p>
+        <p class="rx" style="--d:.18s"><b>Заказы дня</b>По нажатию на день открываются <em>все заказы на эту дату</em>: адрес, время, услуга, площадь, клиент, сумма и статус. Заказ можно отредактировать или отменить, а к дню <em>добавить заметку</em>, например «ключи у соседей».</p>
+        <p class="rx" style="--d:.26s"><b>Новый заказ</b>Клиента можно <em>найти в базе по имени или телефону</em> или сразу завести нового. Дальше указываются дата, время, услуга, площадь и сумма, а если цена пока неизвестна, <em>диапазон цены</em>.</p>
+        <p class="rx" style="--d:.34s"><b>Клинеры</b>В той же форме <em>назначаются клинеры на заказ</em>, добавляются заметки и фото объекта. Регулярную уборку можно <em>сразу сделать повторяющимся заказом</em>.</p>
+      </div>
+    </div>
+  </section>
+  <section class="pn" aria-label="Расписание на телефоне">
+    <div class="phones">
+      <figure class="ph up rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s1.jpg" width="591" height="1280" alt="Календарь заказов на месяц" loading="lazy"></div></div></figure>
+      <figure class="ph dn rx" data-speed="-.04" style="--d:.08s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s2.jpg" width="591" height="1280" alt="Заказы на выбранный день, данные клиентов вымышленные" loading="lazy"></div></div></figure>
+      <figure class="ph up rx" data-speed=".03" style="--d:.16s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-s3.jpg" width="591" height="1280" alt="Форма нового заказа" loading="lazy"></div></div></figure>
+      <figure class="formcard rx" data-speed=".1" style="--d:.4s"><img class="sk" src="img/voda-form.png" width="1110" height="1372" alt="Продолжение формы нового заказа" loading="lazy"></figure>
+    </div>
+  </section>
+  <section class="pn" aria-label="Выпадающие списки формы">
+    <figure class="snips rx" data-speed="-.05">
+      <div><img src="img/voda-x1.png" width="550" height="336" alt="Выбор клиента и повтор последнего заказа, имя вымышленное" loading="lazy"><img src="img/voda-x3.png" width="569" height="589" alt="Выбор услуги" loading="lazy"></div>
+      <div><img src="img/voda-x2.png" width="568" height="472" alt="Выбор статуса заказа" loading="lazy"><img src="img/voda-x4.png" width="568" height="507" alt="Выбор периодичности повтора" loading="lazy"></div>
+    </figure>
+  </section>
+
+  <!-- 03 Clients -->
+  <section class="pn ch" data-ch="База клиентов" data-n="03" aria-labelledby="c3">
+    <span class="ch-num" data-speed=".35" aria-hidden="true">03</span>
+    <div class="ch-head">
+      <span class="ch-k rx">Клиенты и история</span>
+      <h2 class="ch-ttl rx" id="c3" style="--d:.05s">База клиентов</h2>
+      <div class="pts">
+        <p class="rx" style="--d:.1s"><b>Клиенты</b>Все клиенты собраны в <em>одну базу с поиском по имени и телефону</em>. В списке сразу видно адрес объекта, последний заказ и <em>LTV, сколько клиент принёс за всё время</em>.</p>
+        <p class="rx" style="--d:.18s"><b>Карточка</b>В карточке клиента телефон, адрес, сумма и количество заказов, фото объекта и <em>полная история заказов</em>. Любой заказ из истории можно <em>повторить в один клик</em>, отредактировать или отменить.</p>
+        <p class="rx" style="--d:.26s"><b>Новый клиент</b>Короткая форма: имя или название объекта, телефон и адрес. Сюда же пишутся <em>особенности объекта</em>, например домофон или животные, и прикладываются фото.</p>
+      </div>
+    </div>
+  </section>
+  <section class="pn" aria-label="База клиентов на телефоне">
+    <div class="phones wide-l">
+      <figure class="ph rx" data-speed=".05"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kL.jpg" width="591" height="1280" alt="Список клиентов, данные вымышленные" loading="lazy"></div><img class="pop kc k1" src="img/voda-kc1.png" alt="" loading="lazy"><img class="pop kc k2" src="img/voda-kc2.png" alt="" loading="lazy"><img class="pop kc k3" src="img/voda-kc3.png" alt="" loading="lazy"></div></figure>
+      <figure class="ph dn rx" data-speed="-.04" style="--d:.1s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kC.jpg" width="591" height="1280" alt="Карточка клиента с историей заказов, данные вымышленные" loading="lazy"></div></div></figure>
+      <figure class="ph up rx" data-speed=".04" style="--d:.2s"><div class="devfull sk"><div class="screen"><i class="island"></i><img src="img/voda-kR.jpg" width="591" height="1280" alt="Форма нового клиента" loading="lazy"></div></div></figure>
+    </div>
+  </section>
+
+  <!-- 04 Finance -->
+  <section class="pn ch" data-ch="Финансы" data-n="04" aria-labelledby="c4">
+    <span class="ch-num" data-speed=".35" aria-hidden="true">04</span>
+    <div class="ch-head">
+      <span class="ch-k rx">Деньги без Excel</span>
+      <h2 class="ch-ttl rx" id="c4" style="--d:.05s">Финансы</h2>
+      <div class="pts one" style="max-width:560px">
+        <p class="rx" style="--d:.1s"><b>Зарплаты</b>Зарплата клинеров <em>считается автоматически</em>: 40% от суммы заказа, поровну между всеми, кто был на заказе. Видно число выполненных заказов и сумму к выплате.</p>
+        <p class="rx" style="--d:.18s"><b>Доходы</b>Лента всех оплаченных заказов: дата, клиент, кто убирал и сколько пришло.</p>
+        <p class="rx" style="--d:.26s"><b>Расходы</b>Начисления клинерам попадают в расходы сами, с пометкой «авто». Любую запись можно <em>поправить вручную</em>.</p>
+      </div>
+    </div>
+  </section>
+  <section class="pn" aria-label="Экраны финансов">
+    <figure class="fin">
+      <img class="rx sk" src="img/voda-fin1.png" width="2602" height="764" alt="Зарплаты клинеров, имена вымышленные" loading="lazy">
+      <img class="rx sk" style="--d:.1s" src="img/voda-fin2.png" width="1281" height="1238" alt="Доходы, данные клиентов вымышленные" loading="lazy">
+      <img class="rx sk" style="--d:.2s" src="img/voda-fin3.png" width="1264" height="1221" alt="Расходы, данные клиентов вымышленные" loading="lazy">
+    </figure>
+  </section>
+
+  <!-- 05 Site -->
+  <section class="pn ch" data-ch="Сайт" data-n="05" aria-labelledby="c5">
+    <span class="ch-num" data-speed=".35" aria-hidden="true">05</span>
+    <div class="ch-head" style="width:min(560px,84vw)">
+      <span class="ch-k rx">До CRM</span>
+      <h2 class="ch-ttl rx" id="c5" style="--d:.05s">Сайт</h2>
+      <div class="pts one">
+        <p class="rx" style="--d:.1s">Ранее для этой компании я сделал <em>многостраничный сайт</em>.</p>
+      </div>
+      <a class="ilink rx" style="--d:.2s" href="https://cleaning-voda.ru/" target="_blank" rel="noopener">cleaning-voda.ru<span class="ar" aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+  <section class="pn" aria-label="Сайт компании">
+    <figure class="site rx" data-speed="-.06"><img class="sk" src="img/voda-site.jpg" width="1760" height="1320" alt="Сайт клининговой компании Вода на ноутбуке" loading="lazy"></figure>
+  </section>
+
+  <div class="fade l2d" aria-hidden="true"></div>
+  <div class="zone dark">
+    <section class="pn" data-ch="Итог" data-n="06" aria-label="Итог">
+      <p class="stmt" id="stmt">Менеджеру больше не нужно сверять календарь, переписки и Excel. <span class="hl">Расписание, клиенты и все цифры</span> в одном окне, а <span class="hl">зарплата клинеров считается автоматически</span>.</p>
+    </section>
+    <section class="pn" aria-labelledby="mh" style="padding-right:clamp(16px,8vw,116px)">
+      <div class="more">
+        <h2 id="mh" class="rx">Другие кейсы</h2>
+        <div class="mgrid">
+          <a class="mc rx" style="--d:.06s" href="index.html#cases"><div class="pic"><img src="img/ats-laptop.jpg" alt="CRM детейлинг-студии ATS Detailing" loading="lazy"></div><h3>ATS Detailing</h3><p>CRM с актом приёмки авто</p></a>
+          <a class="mc rx" style="--d:.12s" href="index.html#cases"><div class="pic"><img src="img/ga-mock.jpg" alt="CRM для импорта авто GlobalAuto" loading="lazy"></div><h3>GlobalAuto</h3><p>Воронка, сделки и договоры</p></a>
+          <a class="mc rx" style="--d:.18s" href="index.html#cases"><div class="pic"><img src="img/key-phone.jpg" alt="Мини-приложение записи" loading="lazy"></div><h3>Запись для мастера</h3><p>Мини-приложение записи</p></a>
+        </div>
+        <a class="home rx" style="--d:.24s" href="index.html#cases">Вернуться к кейсам<span class="ar" aria-hidden="true">←</span></a>
+      </div>
+    </section>
+  </div>
+
+</div>
+</div>
+</main>
+
+<nav class="prog" aria-label="Разделы кейса"><div class="rail"><i class="bar" id="bar"></i></div></nav>
+
+<script>
+(function(){
+  var root=document.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.classList.add('js');
+  var hs=document.getElementById('hs'),pin=document.getElementById('pin'),track=document.getElementById('track'),bar=document.getElementById('bar'),hint=document.getElementById('hint'),chn=document.getElementById('chn'),cht=document.getElementById('cht'),prog=document.querySelector('.prog');
+  // split the closing statement into words for the scroll-driven highlight
+  var stmt=document.getElementById('stmt'),words=[];
+  (function split(node,hl){Array.prototype.slice.call(node.childNodes).forEach(function(n){
+    if(n.nodeType===3){var f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(function(t){if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t));return}var s=document.createElement('span');s.className='w'+(hl?' hl':'');s.textContent=t;words.push(s);f.appendChild(s)});n.parentNode.replaceChild(f,n)}
+    else split(n,hl||n.classList.contains('hl'))})})(stmt,false);
+
+  function offX(el){var x=0;while(el&&el!==track){x+=el.offsetLeft;el=el.offsetParent}return x}
+  var W,H,maxX=0,top0=0,par=[],rev=[],chs=[],sx=0,sw=0,cur=0,tgt=0,prev=0,sk=0,curCh=-1;
+  function measure(){
+    W=innerWidth;H=pin.clientHeight;maxX=Math.max(0,track.scrollWidth-W);
+    hs.style.height=(maxX+H)+'px';top0=hs.offsetTop;
+    par=[].map.call(track.querySelectorAll('[data-speed]'),function(el){return{el:el,x:offX(el)+el.offsetWidth/2,s:+el.dataset.speed}});
+    rev=[].map.call(track.querySelectorAll('.rx'),function(el){return{el:el,x:offX(el)}});
+    chs=[].map.call(track.querySelectorAll('[data-ch]'),function(el){return{x:offX(el),t:el.dataset.ch,n:el.dataset.n}});
+    sx=offX(stmt);sw=stmt.offsetWidth;
+    prog.querySelectorAll('button').forEach(function(b){b.remove()});
+    chs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.style.left=(maxX?Math.min(c.x/maxX,1)*100:0)+'%';b.innerHTML='<i></i><span>'+c.n+' '+c.t+'</span>';b.setAttribute('aria-label',c.t);
+      b.addEventListener('click',function(){go(c.x)});prog.appendChild(b)});
+    tgt=clamp(scrollY-top0);
+  }
+  function clamp(v){return Math.max(0,Math.min(maxX,v))}
+  function go(x){scrollTo({top:top0+clamp(x-(x?W*.04:0)),behavior:rm?'auto':'smooth'})}
+  addEventListener('scroll',function(){tgt=clamp(scrollY-top0);if(scrollY>40)hint.classList.add('gone')},{passive:true});
+  // trackpads and shift+wheel scroll sideways: map that to the page scroll
+  addEventListener('wheel',function(e){if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();scrollBy(0,e.deltaX)}},{passive:false});
+  addEventListener('keydown',function(e){if(e.target.closest&&e.target.closest('input,textarea'))return;
+    if(e.key==='ArrowRight'){e.preventDefault();scrollBy({top:W*.6,behavior:rm?'auto':'smooth'})}
+    if(e.key==='ArrowLeft'){e.preventDefault();scrollBy({top:-W*.6,behavior:rm?'auto':'smooth'})}});
+  // keyboard focus inside the track should bring that element on screen
+  track.addEventListener('focusin',function(e){var x=offX(e.target);if(x<cur||x>cur+W-80)go(x-W*.3)});
+
+  function frame(){
+    cur+=(tgt-cur)*(rm?1:.085);if(Math.abs(tgt-cur)<.05)cur=tgt;
+    track.style.transform='translate3d('+(-cur).toFixed(2)+'px,0,0)';
+    var v=cur-prev;prev=cur;
+    if(!rm){sk+=(Math.max(-5,Math.min(5,-v*.09))-sk)*.12;track.style.setProperty('--sk',sk.toFixed(3)+'deg');
+      for(var i=0;i<par.length;i++){var p=par[i],d=p.x-cur-W/2;p.el.style.translate=(-d*p.s).toFixed(1)+'px 0'}}
+    for(var j=0;j<rev.length;j++){var r=rev[j];if(!r.el.classList.contains('in')&&r.x-cur<W*.9)r.el.classList.add('in')}
+    bar.style.transform='scaleX('+(maxX?cur/maxX:0)+')';
+    var ci=0;for(var k=0;k<chs.length;k++)if(chs[k].x<=cur+W*.5)ci=k;
+    if(ci!==curCh){curCh=ci;var c=chs[ci];cht.classList.add('sw');setTimeout(function(){chn.textContent=c.n;cht.textContent=c.t;cht.classList.remove('sw')},rm?0:220)}
+    var pr=(cur+W*.92-sx)/(W*.62+sw*.5),n=Math.round(Math.max(0,Math.min(1,pr))*words.length);
+    for(var q=0;q<words.length;q++)words[q].classList.toggle('on',q<n);
+    requestAnimationFrame(frame);
+  }
+  measure();cur=tgt;
+  var t;function re(){clearTimeout(t);t=setTimeout(measure,80)}
+  addEventListener('resize',re);addEventListener('load',measure);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
+  [].forEach.call(document.images,function(im){if(!im.complete)im.addEventListener('load',re)});
+  requestAnimationFrame(function(){requestAnimationFrame(function(){root.classList.add('ready')})});
+  requestAnimationFrame(frame);
+  // coming back from the home page with the browser's back button
+  addEventListener('pageshow',function(e){if(e.persisted){measure();root.classList.add('ready')}});
+
+  // star trail behind the cursor (same as on the home page): white on dark areas, orange on light
+  if(rm||!matchMedia('(pointer:fine)').matches)return;
+  var sc=document.createElement('canvas');sc.className='stars';sc.setAttribute('aria-hidden','true');document.body.appendChild(sc);
+  var g=sc.getContext('2d'),parts=[],cx=0,cy=0,lx=null,ly=null,has=false,tcol=[1,1,1];
+  addEventListener('pointermove',function(e){cx=e.clientX;cy=e.clientY;has=true;var el=document.elementFromPoint(cx,cy);tcol=(el&&el.closest&&el.closest('.dark'))?[1,1,1]:[1,.353,.078]},{passive:true});
+  var last=performance.now();
+  function stars(now){var dt=Math.min((now-last)/1000,.033);last=now;
+    var dpr=Math.min(devicePixelRatio||1,2),SW=innerWidth,SH=innerHeight;if(sc.width!==Math.round(SW*dpr)||sc.height!==Math.round(SH*dpr)){sc.width=Math.round(SW*dpr);sc.height=Math.round(SH*dpr)}
+    if(has&&lx!==null){var dx=cx-lx,dy=cy-ly,d=Math.hypot(dx,dy),n=Math.min(20,Math.floor(d/5));
+      for(var i=0;i<n;i++){var tt=Math.random(),sp=.25+Math.random()*.6,a=Math.random()*6.283;
+        parts.push({x:lx+dx*tt+(Math.random()-.5)*14,y:ly+dy*tt+(Math.random()-.5)*14,vx:Math.cos(a)*18*sp-dx*.6,vy:Math.sin(a)*18*sp-dy*.6+8,r:.7+Math.random()*1.8,life:0,max:.7+Math.random()*1.1,tw:Math.random()<.16,ph:Math.random()*6.283,c:tcol.slice()})}}
+    if(has){lx=cx;ly=cy}
+    g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,SW,SH);
+    for(var k=parts.length-1;k>=0;k--){var p=parts[k];p.life+=dt;if(p.life>p.max){parts.splice(k,1);continue}
+      p.vx*=.96;p.vy*=.96;p.x+=p.vx*dt;p.y+=p.vy*dt;
+      var f=1-p.life/p.max,al=Math.min(1,p.life*12)*f*f,tw=.65+.35*Math.sin(p.ph+p.life*18),rgb='rgba('+Math.round(p.c[0]*255)+','+Math.round(p.c[1]*255)+','+Math.round(p.c[2]*255)+',';
+      g.fillStyle=rgb+(al*tw).toFixed(3)+')';g.beginPath();g.arc(p.x,p.y,p.r*(.6+.4*f),0,6.283);g.fill();
+      if(p.tw){var L=p.r*5*f*tw;g.strokeStyle=rgb+(al*.8).toFixed(3)+')';g.lineWidth=.8;g.beginPath();g.moveTo(p.x-L,p.y);g.lineTo(p.x+L,p.y);g.moveTo(p.x,p.y-L);g.lineTo(p.x,p.y+L);g.stroke()}}
+    if(parts.length>900)parts.splice(0,parts.length-900);
+    requestAnimationFrame(stars)}
+  requestAnimationFrame(stars);
+})();
+</script>
+</body>
+</html>
