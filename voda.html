@@ -67,7 +67,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
 /* reveal */
 .js .rx{opacity:0;transform:translateY(54px);transition:opacity 1s var(--ease),transform 1.2s var(--ease);transition-delay:var(--d,0s)}
 .js .rx.in{opacity:1;transform:none}
-.sk{transform:skewX(var(--sk,0deg))}
+[data-speed]{will-change:translate}
 
 /* ---------- intro ---------- */
 .intro{position:relative;gap:clamp(32px,5vw,90px);padding-left:clamp(16px,8vw,116px);padding-right:clamp(40px,6vw,100px)}
@@ -426,7 +426,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
     prog.querySelectorAll('button').forEach(function(b){b.remove()});
     chs.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.style.left=(maxX?Math.min(c.x/maxX,1)*100:0)+'%';b.innerHTML='<i></i><span>'+c.n+' '+c.t+'</span>';b.setAttribute('aria-label',c.t);
       b.addEventListener('click',function(){go(c.x)});prog.appendChild(b)});
-    tgt=clamp(scrollY-top0);
+    tgt=clamp(scrollY-top0);dirty=true;
   }
   function clamp(v){return Math.max(0,Math.min(maxX,v))}
   function go(x){scrollTo({top:top0+clamp(x-(x?W*.04:0)),behavior:rm?'auto':'smooth'})}
@@ -439,18 +439,19 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
   // keyboard focus inside the track should bring that element on screen
   track.addEventListener('focusin',function(e){var x=offX(e.target);if(x<cur||x>cur+W-80)go(x-W*.3)});
 
+  var dirty=true,lastN=-1;
   function frame(){
-    cur+=(tgt-cur)*(rm?1:.085);if(Math.abs(tgt-cur)<.05)cur=tgt;
+    cur+=(tgt-cur)*(rm?1:.14);if(Math.abs(tgt-cur)<.05)cur=tgt;
+    // nothing moved since the last frame: skip all the writes
+    if(cur===prev&&!dirty){requestAnimationFrame(frame);return}dirty=false;prev=cur;
     track.style.transform='translate3d('+(-cur).toFixed(2)+'px,0,0)';
-    var v=cur-prev;prev=cur;
-    if(!rm){sk+=(Math.max(-5,Math.min(5,-v*.09))-sk)*.12;track.style.setProperty('--sk',sk.toFixed(3)+'deg');
-      for(var i=0;i<par.length;i++){var p=par[i],d=p.x-cur-W/2;p.el.style.translate=(-d*p.s).toFixed(1)+'px 0'}}
+    if(!rm){for(var i=0;i<par.length;i++){var p=par[i],d=p.x-cur-W/2;if(Math.abs(d)>W*1.6)continue;p.el.style.translate=(-d*p.s).toFixed(1)+'px 0'}}
     for(var j=0;j<rev.length;j++){var r=rev[j];if(!r.el.classList.contains('in')&&r.x-cur<W*.9)r.el.classList.add('in')}
     bar.style.transform='scaleX('+(maxX?cur/maxX:0)+')';
     var ci=0;for(var k=0;k<chs.length;k++)if(chs[k].x<=cur+W*.5)ci=k;
     if(ci!==curCh){curCh=ci;var c=chs[ci];cht.classList.add('sw');setTimeout(function(){chn.textContent=c.n;cht.textContent=c.t;cht.classList.remove('sw')},rm?0:220)}
     var pr=(cur+W*.92-sx)/(W*.62+sw*.5),n=Math.round(Math.max(0,Math.min(1,pr))*words.length);
-    for(var q=0;q<words.length;q++)words[q].classList.toggle('on',q<n);
+    if(n!==lastN){lastN=n;for(var q=0;q<words.length;q++)words[q].classList.toggle('on',q<n)}
     requestAnimationFrame(frame);
   }
   measure();cur=tgt;
@@ -475,6 +476,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-off
       for(var i=0;i<n;i++){var tt=Math.random(),sp=.25+Math.random()*.6,a=Math.random()*6.283;
         parts.push({x:lx+dx*tt+(Math.random()-.5)*14,y:ly+dy*tt+(Math.random()-.5)*14,vx:Math.cos(a)*18*sp-dx*.6,vy:Math.sin(a)*18*sp-dy*.6+8,r:.7+Math.random()*1.8,life:0,max:.7+Math.random()*1.1,tw:Math.random()<.16,ph:Math.random()*6.283,c:tcol.slice()})}}
     if(has){lx=cx;ly=cy}
+    if(!parts.length){if(sc._d){g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,SW,SH);sc._d=false;sc.style.visibility='hidden'}requestAnimationFrame(stars);return}if(!sc._d){sc._d=true;sc.style.visibility=''}
     g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,SW,SH);
     for(var k=parts.length-1;k>=0;k--){var p=parts[k];p.life+=dt;if(p.life>p.max){parts.splice(k,1);continue}
       p.vx*=.96;p.vy*=.96;p.x+=p.vx*dt;p.y+=p.vy*dt;

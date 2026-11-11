@@ -907,7 +907,7 @@ body{margin:8px}
   var cur=window.scrollY, target=cur, running=false;
   function maxY(){return document.documentElement.scrollHeight-window.innerHeight}
   function loop(){
-    cur+=(target-cur)*0.085;
+    cur+=(target-cur)*0.16;
     if(Math.abs(target-cur)<0.5){cur=target;running=false}
     window.scrollTo(0,cur);
     if(running) requestAnimationFrame(loop);
@@ -957,7 +957,7 @@ body{margin:8px}
       var r=st.getBoundingClientRect();
       var p=(vh*0.9-r.top)/(r.height+vh*0.4);
       var n=Math.round(Math.max(0,Math.min(1,p))*words.length);
-      for(var i=0;i<words.length;i++) words[i].classList.toggle('on',i<n);
+      if(n!==st._n){st._n=n;for(var i=0;i<words.length;i++) words[i].classList.toggle('on',i<n)}
     }
     if(ts){
       var tr=tin.getBoundingClientRect();
@@ -966,6 +966,7 @@ body{margin:8px}
       var q=cl((vh*0.92-tr.top)/(vh*0.55)), N=tw.length, span=5;
       for(var k=0;k<N;k++){
         var t=sm((q*(N+span)-k)/span), u=1-t;
+        t=Math.round(t*100)/100;if(tw[k]._t===t)continue;tw[k]._t=t;u=1-t;
         var s=tw[k].style;
         s.opacity=(0.08+t*0.92).toFixed(3);
         s.filter=u>0.01?'blur('+(u*9).toFixed(1)+'px)':'none';
@@ -980,7 +981,7 @@ body{margin:8px}
       var d=(sr.top+sr.height/2)-vh/2, span=vh*0.75;
       var t=Math.max(0,Math.min(1,d/span));
       t=t*t*(3-2*t);
-      for(var j=0;j<skCards.length;j++) skCards[j].style.translate='0 '+(skOff[j]*k*t).toFixed(1)+'px';
+      for(var j=0;j<skCards.length;j++){var tv='0 '+(skOff[j]*k*t).toFixed(1)+'px';if(skCards[j]._tv!==tv){skCards[j]._tv=tv;skCards[j].style.translate=tv}}
     }
   }
   function req(){if(!ticking){ticking=true;requestAnimationFrame(frame)}}
@@ -1079,7 +1080,9 @@ body{margin:8px}
       gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,c.tex);gl.uniform1i(u.I,0);gl.uniform2f(u.sz,r.width*dpr,r.height*dpr);gl.uniform2f(u.isz,c.iw,c.ih);gl.uniform1f(u.rad,24*dpr);gl.uniform1f(u.op,op);
       blit(null,[r.left/W,1-r.bottom/H,r.width/W,r.height/H])}
     return any}
+  var smearOn=false;
   function smearText(dt){var now=performance.now();while(trail.length&&now-trail[0].t>900)trail.shift();
+    if(!trail.length&&!smearOn)return;smearOn=false;
     var H=innerHeight;
     for(var i=0;i<words.length;i++){var w=words[i],target=0;
       if(trail.length){var r=w.el.getBoundingClientRect();if(r.bottom>-50&&r.top<H+50){var x=r.left+r.width/2,y=r.top+r.height/2,rw=Math.max(60,r.width*.5);
@@ -1087,7 +1090,8 @@ body{margin:8px}
       w.s+=(target-w.s)*Math.min(1,dt*(target>w.s?14:4));
       var s=w.s*.6,st=w.el.style;
       if(s>.02){var d=(s*3).toFixed(1);if(!w.soft)st.transform='translateX('+(s*2).toFixed(1)+'px)';st.textShadow=d+'px 0 rgba(255,40,90,'+(s*.7).toFixed(2)+'),-'+d+'px 0 rgba(0,190,255,'+(s*.7).toFixed(2)+')';w.on=true}
-      else if(w.on){st.transform='';st.filter='';st.textShadow='';w.on=false}}}
+      else if(w.on){st.transform='';st.filter='';st.textShadow='';w.on=false}
+      if(w.on||w.s>.005)smearOn=true}}
   // star trail: dots spawned along the path, a few with a four-point sparkle, drifting and fading
   var sc=document.createElement('canvas');sc.className='stars';sc.setAttribute('aria-hidden','true');document.body.appendChild(sc);var sx=sc.getContext('2d'),parts=[],lx=null,ly=null;
   function stars(dt){var dpr=Math.min(devicePixelRatio||1,2),W=innerWidth,H=innerHeight;if(sc.width!==Math.round(W*dpr)||sc.height!==Math.round(H*dpr)){sc.width=Math.round(W*dpr);sc.height=Math.round(H*dpr)}
@@ -1095,6 +1099,7 @@ body{margin:8px}
       for(var i=0;i<n;i++){var t=Math.random(),sp=.25+Math.random()*.6,a=Math.random()*6.283;
         parts.push({x:lx+dx*t+(Math.random()-.5)*14,y:ly+dy*t+(Math.random()-.5)*14,vx:Math.cos(a)*18*sp-dx*.6,vy:Math.sin(a)*18*sp-dy*.6+8,r:.7+Math.random()*1.8,life:0,max:.7+Math.random()*1.1,tw:Math.random()<.16,ph:Math.random()*6.283,c:tcol.slice()})}}
     lx=cx;ly=cy;
+    if(!parts.length){if(sc._dirty){sx.setTransform(dpr,0,0,dpr,0,0);sx.clearRect(0,0,W,H);sc._dirty=false;sc.style.visibility='hidden'}return}if(!sc._dirty){sc._dirty=true;sc.style.visibility=''}
     sx.setTransform(dpr,0,0,dpr,0,0);sx.clearRect(0,0,W,H);
     for(var k=parts.length-1;k>=0;k--){var p=parts[k];p.life+=dt;if(p.life>p.max){parts.splice(k,1);continue}
       p.vx*=.96;p.vy*=.96;p.x+=p.vx*dt;p.y+=p.vy*dt;
@@ -1102,17 +1107,20 @@ body{margin:8px}
       sx.fillStyle=rgb+(al*tw).toFixed(3)+')';sx.beginPath();sx.arc(p.x,p.y,p.r*(.6+.4*f),0,6.283);sx.fill();
       if(p.tw){var L=p.r*5*f*tw;sx.strokeStyle=rgb+(al*.8).toFixed(3)+')';sx.lineWidth=.8;sx.beginPath();sx.moveTo(p.x-L,p.y);sx.lineTo(p.x+L,p.y);sx.moveTo(p.x,p.y-L);sx.lineTo(p.x,p.y+L);sx.stroke()}}
     if(parts.length>900)parts.splice(0,parts.length-900)}
-  var last=performance.now();
+  var last=performance.now(),dirty=true;
+  var csec=document.querySelector('.tasks');
+  function cardsOnScreen(){if(!csec)return true;var r=csec.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}
   function loop(now){var dt=Math.min((now-last)/1000,.033);last=now;
-    if(size())init();
+    if(size()){init();dirty=true}
     gl.disable(gl.BLEND);
     if(moved){var dx=(mx-px),dy=(my-py),sp=Math.hypot(dx,dy);
       if(sp>0.0004){var n=Math.min(8,Math.ceil(sp/.012));for(var i=1;i<=n;i++){var t=i/n;splat(px+dx*t,py+dy*t,dx*1600,dy*1600,Math.min(1.6,.5+sp*40))}active=4;trail.push({x:cx,y:cy,t:now})}
       px=mx;py=my;moved=false}
     if(active>0){active-=dt;step(dt)}
-    gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
-    if(ready)drawCards();
+    // redraw only while case pictures are on screen; otherwise leave the cleared canvas alone
+    var vis=ready&&cardsOnScreen();
+    if(vis||dirty){gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);dirty=vis&&drawCards();cv.style.visibility=dirty?'':'hidden'}
     stars(dt);
     smearText(dt);
     requestAnimationFrame(loop)}
