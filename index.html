@@ -1055,7 +1055,7 @@ body{margin:8px}
   var ready=0;
   cards.forEach(function(c){function up(){try{var t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c.im);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
       [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER].forEach(function(x){gl.texParameteri(gl.TEXTURE_2D,x,gl.LINEAR)});gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-      c.tex=t;c.iw=c.im.naturalWidth;c.ih=c.im.naturalHeight;if(++ready===cards.length)document.documentElement.classList.add('gl-on')}catch(e){}}
+      c.tex=t;c.iw=c.im.naturalWidth;c.ih=c.im.naturalHeight;++ready}catch(e){}}
     c.im.loading='eager';if(c.im.complete&&c.im.naturalWidth)up();else c.im.addEventListener('load',up,{once:true})});
 
   // headings that smear under the fresh trail
@@ -1068,7 +1068,7 @@ body{margin:8px}
 
   var darkSel='.hero,.tasks,.cta,.sk.dark,.plan.feat,.step:last-child,.svc.photo',col=[1,1,1],tcol=[1,1,1];
   var mx=0,my=0,px=0,py=0,cx=0,cy=0,moved=false,first=true,active=0,trail=[];
-  addEventListener('pointermove',function(e){var el=document.elementFromPoint(e.clientX,e.clientY);tcol=(el&&el.closest&&el.closest(darkSel))?[1,1,1]:[1,.353,.078];
+  addEventListener('pointermove',function(e){var el=document.elementFromPoint(e.clientX,e.clientY);overCases=!!(el&&el.closest&&el.closest('.tasks'));tcol=(el&&el.closest&&el.closest(darkSel))?[1,1,1]:[1,.353,.078];
     cx=e.clientX;cy=e.clientY;mx=cx/innerWidth;my=1-cy/innerHeight;if(first){px=mx;py=my;first=false}moved=true},{passive:true});
   function splat(x,y,dx,dy,amt){var ar=cv.width/cv.height,u=use(P.splat,vel.tx);gl.uniform1i(u.T,vel.r.bind(0));gl.uniform1f(u.ar,ar);gl.uniform2f(u.pt,x,y);gl.uniform3f(u.c,dx,dy,0);gl.uniform1f(u.r,.0035);gl.uniform1f(u.mx,0);blit(vel.wr);vel.swap();
 }
@@ -1115,7 +1115,8 @@ body{margin:8px}
       sx.fillStyle=rgb+(al*tw).toFixed(3)+')';sx.beginPath();sx.arc(p.x,p.y,p.r*(.6+.4*f),0,6.283);sx.fill();
       if(p.tw){var L=p.r*5*f*tw;sx.strokeStyle=rgb+(al*.8).toFixed(3)+')';sx.lineWidth=.8;sx.beginPath();sx.moveTo(p.x-L,p.y);sx.lineTo(p.x+L,p.y);sx.moveTo(p.x,p.y-L);sx.lineTo(p.x,p.y+L);sx.stroke()}}
     if(parts.length>900)parts.splice(0,parts.length-900)}
-  var last=performance.now(),dirty=true;
+  var last=performance.now(),dirty=true,glOn=false,overCases=false,lastScroll=0,lastCheck=0;
+  addEventListener('scroll',function(){lastScroll=performance.now();if(glOn){glOn=false;document.documentElement.classList.remove('gl-on');cv.style.visibility='hidden';dirty=true}},{passive:true});
   var csec=document.querySelector('.tasks');
   function cardsOnScreen(){if(!csec)return true;var r=csec.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}
   function loop(now){var dt=Math.min((now-last)/1000,.033);last=now;
@@ -1124,9 +1125,14 @@ body{margin:8px}
     if(moved){var dx=(mx-px),dy=(my-py),sp=Math.hypot(dx,dy);
       if(sp>0.0004){var n=Math.min(8,Math.ceil(sp/.012));for(var i=1;i<=n;i++){var t=i/n;splat(px+dx*t,py+dy*t,dx*1600,dy*1600,Math.min(1.6,.5+sp*40))}active=4;trail.push({x:cx,y:cy,t:now})}
       px=mx;py=my;moved=false}
-    if(active>0){active-=dt;step(dt)}
+    if(active>0&&glOn){active-=dt;step(dt)}
     // redraw only while case pictures are on screen; otherwise leave the cleared canvas alone
-    var vis=ready&&cardsOnScreen();
+    // the WebGL copy of the case pictures is used only while the cursor is over the cases and the page is not scrolling;
+    // during scrolling the plain <img> tags show, so the pictures move exactly with the page
+    if(lastScroll>lastCheck&&now-lastScroll>220){lastCheck=lastScroll;if(!first){var ue=document.elementFromPoint(cx,cy);overCases=!!(ue&&ue.closest&&ue.closest('.tasks'))}}
+    var glWant=ready===cards.length&&overCases&&now-lastScroll>220&&cardsOnScreen();
+    if(glWant!==glOn){glOn=glWant;document.documentElement.classList.toggle('gl-on',glOn)}
+    var vis=glOn;
     if(vis||dirty){gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
       gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);dirty=vis&&drawCards();cv.style.visibility=dirty?'':'hidden'}
     stars(dt);
