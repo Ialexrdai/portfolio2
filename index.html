@@ -817,10 +817,15 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
   var root=document.documentElement;
   var still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // RU / EN switch (visual for now)
+  // RU / EN switch: two static versions of the page, scroll position carried over
+  var isEn=root.lang==='en';
+  try{var ly=sessionStorage.langY;if(ly){sessionStorage.removeItem('langY');history.scrollRestoration='manual';addEventListener('load',function(){scrollTo(0,+ly)});scrollTo(0,+ly)}}catch(e){}
   document.querySelectorAll('.lang button').forEach(function(btn){
     btn.addEventListener('click',function(){
+      var en=btn.id==='lang-en';if(en===isEn)return;
       document.querySelectorAll('.lang button').forEach(function(x){x.setAttribute('aria-pressed',String(x===btn))});
+      try{localStorage.lang=en?'en':'ru';sessionStorage.preSeen=1;sessionStorage.langY=String(Math.round(window.scrollY))}catch(e){}
+      location.href=(en?'index-en.html':'index.html');
     });
   });
   // hero intro starts when the preloader leaves
