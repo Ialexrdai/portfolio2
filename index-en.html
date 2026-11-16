@@ -538,6 +538,8 @@ body{margin:8px}
   .js .step .tools.on em{opacity:1;transform:none}
   .js .step .tools.on em:nth-child(2){transition-delay:.08s}
   .ty-rest{visibility:hidden}
+  .js .path-y{opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .js .path-row.seen .path-y{opacity:1;transform:none}
   .ty-car{display:inline-block;width:2px;height:1em;margin:0 -2px 0 0;vertical-align:-.12em;background:var(--accent);animation:tyBlink .8s steps(1) infinite}
 }
 @keyframes tyBlink{50%{opacity:0}}
@@ -998,6 +1000,17 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       [].forEach.call(stp.children,function(_,ci){setTimeout(function(){typeCard(ci)},350+ci*260)})}})},{threshold:.25});
     sio.observe(stp);
   }else if(stp){stp.classList.add('seen');stp.querySelectorAll('.tools').forEach(function(t){t.classList.add('on')})}
+  // about: each year row types its label and text when it scrolls into view
+  var prow=document.querySelectorAll('.path-row');
+  if(prow.length&&!still&&'IntersectionObserver' in window){
+    var prep=function(el){var full=el.textContent;el.textContent='';var a=document.createElement('span'),c=document.createElement('span'),b=document.createElement('span');
+      c.className='ty-car';c.style.display='none';b.className='ty-rest';b.textContent=full;el.appendChild(a);el.appendChild(c);el.appendChild(b);return{a:a,b:b,c:c,full:full}};
+    var run=function(x,stepN,ms,done){var i=0,n=x.full.length;x.c.style.display='';
+      (function tick(){i=Math.min(n,i+stepN);x.a.textContent=x.full.slice(0,i);x.b.textContent=x.full.slice(i);if(i<n)setTimeout(tick,ms);else{x.c.style.display='none';done&&done()}})()};
+    var pio=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;pio.unobserve(e.target);var r=e.target;r.classList.add('seen');
+      setTimeout(function(){run(r._k,1,40,function(){run(r._p,3,16)})},250)})},{threshold:.35});
+    [].forEach.call(prow,function(r){var k=r.querySelector('.path-k'),pp=r.querySelector('p');if(!k||!pp)return;r._k=prep(k);r._p=prep(pp);pio.observe(r)});
+  }else{[].forEach.call(prow,function(r){r.classList.add('seen')})}
 
   // smooth wheel scrolling on desktop
   var fine=window.matchMedia('(pointer: fine)').matches;
