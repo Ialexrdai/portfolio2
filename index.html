@@ -477,6 +477,7 @@ body{margin:8px}
 .cs-tip{position:fixed;left:0;top:0;z-index:62;pointer-events:none;padding:10px 16px;border-radius:999px;background:var(--accent);color:#fff;font:600 14px/1 var(--font);white-space:nowrap;box-shadow:0 10px 30px -8px rgba(255,90,20,.6);opacity:0;scale:.4;transition:opacity .25s,scale .45s cubic-bezier(.16,1,.3,1);will-change:transform}
 .cs-tip.on{opacity:1;scale:1}
 @media (hover:none),(pointer:coarse){a.cs[href$=".html"] .cs-pic::after{content:"Смотреть кейс →";position:absolute;left:14px;bottom:14px;padding:9px 14px;border-radius:999px;background:var(--accent);color:#fff;font:600 13px/1 var(--font);box-shadow:0 8px 24px -8px rgba(0,0,0,.5)}}
+.cs:not([href]){cursor:default}
 .cs-tip.soon{background:#fbf7f4;color:#17120f;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
 .gl-on .cs-pic{background:transparent}
 .sw{display:inline-block;will-change:transform,filter}
@@ -634,49 +635,49 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
     </div>
     <p class="cs-gh">Сайты<span>08</span></p>
     <div class="cs-grid">
-      <a class="cs" href="s1-ceramic.html">
+      <a class="cs" data-href="s1-ceramic.html">
         <div class="cs-pic"><img src="img/site9.jpg" alt="S1 Ceramic на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Детейлинг<i>-</i>Тюнинг</div>
         <h3>S1 Ceramic</h3>
         <p>Детейлинг и тюнинг в Екатеринбурге: тёмный стиль и запись с первого экрана.</p>
       </a>
-      <a class="cs" href="akademiki.html">
+      <a class="cs" data-href="akademiki.html">
         <div class="cs-pic"><img src="img/site3.jpg" alt="Сайт футбольной школы Академики на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Спорт<i>-</i>Дети</div>
         <h3>ДФШ «Академики»</h3>
         <p>Футбольная школа для детей 3–12 лет: филиалы по городу и запись на бесплатную тренировку.</p>
       </a>
-      <a class="cs" href="nevolyashka.html">
+      <a class="cs" data-href="nevolyashka.html">
         <div class="cs-pic"><img src="img/site4.jpg" alt="Сайт лезвий для коньков Неволяшка на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Каталог<i>-</i>Хоккей</div>
         <h3>«Неволяшка»</h3>
         <p>Лезвия для хоккейных коньков: надёжнее и дешевле зарубежных брендов.</p>
       </a>
-      <a class="cs" href="frog.html">
+      <a class="cs" data-href="frog.html">
         <div class="cs-pic"><img src="img/site2.jpg" alt="Сайт фулфилмента Frog FulFillment на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Фулфилмент<i>-</i>Маркетплейсы</div>
         <h3>Frog FulFillment</h3>
         <p>Фулфилмент под ключ: приёмка, упаковка, маркировка и отгрузка товара.</p>
       </a>
-      <a class="cs" href="advokat.html">
+      <a class="cs" data-href="advokat.html">
         <div class="cs-pic"><img src="img/site7.jpg" alt="Сайт адвоката Ворухайло на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Юристы<i>-</i>Личный бренд</div>
         <h3>Адвокат Ворухайло</h3>
         <p>Защита в суде и юридическая помощь: портрет, понятный оффер и запись на консультацию.</p>
       </a>
-      <a class="cs" href="holodny-koster.html">
+      <a class="cs" data-href="holodny-koster.html">
         <div class="cs-pic"><img src="img/site8.jpg" alt="Сайт группы Холодный костёр на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Музыка</div>
         <h3>«Холодный костёр»</h3>
         <p>Музыкальный коллектив: послушать песни и заказать свою прямо с первого экрана.</p>
       </a>
-      <a class="cs" href="clean-prime.html">
+      <a class="cs" data-href="clean-prime.html">
         <div class="cs-pic"><img src="img/site5.jpg" alt="Сайт клининга Центр Чистоты на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Клининг<i>-</i>Уфа</div>
         <h3>«Центр Чистоты»</h3>
         <p>Клининг в Уфе: договор, гарантия и расчёт стоимости уборки.</p>
       </a>
-      <a class="cs" href="kristall-clean.html">
+      <a class="cs" data-href="kristall-clean.html">
         <div class="cs-pic"><img src="img/site6.jpg" alt="Сайт клининга Кристалл Clean на ноутбуке" loading="lazy"></div>
         <div class="cs-tags">Сайт<i>-</i>Клининг<i>-</i>Тюмень</div>
         <h3>«Кристалл Clean»</h3>
