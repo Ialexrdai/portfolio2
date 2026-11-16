@@ -524,6 +524,24 @@ body{margin:8px}
   .js .skills.seen .sk-ph img{transform:scale(1)}
   .js .sk h3{border-top-color:transparent;background:linear-gradient(var(--accent),var(--accent)) left top/0% 2px no-repeat;transition:background-size 1s cubic-bezier(.7,0,.2,1) .5s}
   .js .skills.seen .sk h3{background-size:100% 2px}
+  /* process steps: rise in like the skill cards, text types itself */
+  .js .steps>*{opacity:.001;transition:opacity .9s ease;will-change:translate}
+  .js .steps.seen>*{opacity:1}
+  .js .steps.seen>:nth-child(2){transition-delay:.1s}
+  .js .steps.seen>:nth-child(3){transition-delay:.2s}
+  .js .steps.seen>:nth-child(4){transition-delay:.3s}
+  .js .steps.seen>:nth-child(5){transition-delay:.4s}
+  .js .step .no{transform:scale(.4);transition:transform .7s cubic-bezier(.3,1.6,.5,1)}
+  .js .steps.seen .step .no{transform:none}
+  .js .steps.seen .step:nth-child(2) .no{transition-delay:.1s}.js .steps.seen .step:nth-child(3) .no{transition-delay:.2s}.js .steps.seen .step:nth-child(4) .no{transition-delay:.3s}.js .steps.seen .step:nth-child(5) .no{transition-delay:.4s}
+  .js .step .tools em{opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s cubic-bezier(.2,.7,.2,1)}
+  .js .step .tools.on em{opacity:1;transform:none}
+  .js .step .tools.on em:nth-child(2){transition-delay:.08s}
+  .ty-rest{visibility:hidden}
+  .ty-car{display:inline-block;width:2px;height:1em;margin:0 -2px 0 0;vertical-align:-.12em;background:var(--accent);animation:tyBlink .8s steps(1) infinite}
+}
+@keyframes tyBlink{50%{opacity:0}}
+@media (prefers-reduced-motion:no-preference){
 }
 @keyframes heroIn{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:none}}
 @keyframes phIn{from{opacity:0;transform:scale(1.2) translateX(4%);filter:contrast(1.15) brightness(1.04) blur(12px)}to{opacity:1;transform:none;filter:contrast(1.15) brightness(1.04) blur(0)}}
@@ -925,6 +943,31 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
     es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('seen');io.unobserve(e.target)}});
   },{threshold:.18});
   document.querySelectorAll('#skills,.skills').forEach(function(el){io.observe(el)});
+  // process steps: when the row shows up, each card types its title and text
+  var stp=document.querySelector('.steps');
+  if(stp&&!still){
+    var tyEls=[];
+    [].forEach.call(stp.children,function(card,ci){
+      [card.querySelector('h3'),card.querySelector('p')].forEach(function(el){
+        if(!el)return;var full=el.textContent;el.textContent='';
+        var a=document.createElement('span'),c=document.createElement('span'),b=document.createElement('span');
+        c.className='ty-car';c.style.display='none';b.className='ty-rest';b.textContent=full;
+        el.appendChild(a);el.appendChild(c);el.appendChild(b);tyEls.push({card:ci,el:el,a:a,b:b,c:c,full:full});
+      });
+    });
+    var typeCard=function(ci){
+      var list=tyEls.filter(function(x){return x.card===ci}),k=0;
+      (function next(){
+        var x=list[k++];if(!x){var tl=stp.children[ci].querySelector('.tools');if(tl)tl.classList.add('on');return}
+        var i=0,n=x.full.length,step=x.el.tagName==='H3'?2:3;x.c.style.display='';
+        (function tick(){i=Math.min(n,i+step);x.a.textContent=x.full.slice(0,i);x.b.textContent=x.full.slice(i);
+          if(i<n)setTimeout(tick,x.el.tagName==='H3'?45:22);else{x.c.style.display='none';setTimeout(next,120)}})();
+      })();
+    };
+    var sio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){sio.unobserve(e.target);stp.classList.add('seen');
+      [].forEach.call(stp.children,function(_,ci){setTimeout(function(){typeCard(ci)},350+ci*260)})}})},{threshold:.25});
+    sio.observe(stp);
+  }else if(stp){stp.classList.add('seen');stp.querySelectorAll('.tools').forEach(function(t){t.classList.add('on')})}
 
   // smooth wheel scrolling on desktop
   var fine=window.matchMedia('(pointer: fine)').matches;
@@ -974,6 +1017,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
   var csl=document.querySelectorAll('.cs');
   if('IntersectionObserver' in window){var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('seen');cio.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});csl.forEach(function(c){cio.observe(c)})}else csl.forEach(function(c){c.classList.add('seen')});
   var sk=document.querySelector('.skills'), skCards=sk?sk.children:[], skOff=[170,60,250,110];
+  var spC=document.querySelector('.steps'), spCards=spC?spC.children:[], spOff=[150,50,220,90,190];
   function frame(){
     ticking=false;
     var vh=window.innerHeight;
@@ -1006,6 +1050,12 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       var t=Math.max(0,Math.min(1,d/span));
       t=t*t*(3-2*t);
       for(var j=0;j<skCards.length;j++){var tv='0 '+(skOff[j]*k*t).toFixed(1)+'px';if(skCards[j]._tv!==tv){skCards[j]._tv=tv;skCards[j].style.translate=tv}}
+    }
+    if(spC){
+      var w2=window.innerWidth, k2=w2>=1000?1:w2>=560?.5:0;
+      var pr=spC.getBoundingClientRect();
+      var d2=(pr.top+pr.height/2)-vh/2, t2=Math.max(0,Math.min(1,d2/(vh*0.75)));t2=t2*t2*(3-2*t2);
+      for(var j2=0;j2<spCards.length;j2++){var tv2='0 '+(spOff[j2]*k2*t2).toFixed(1)+'px';if(spCards[j2]._tv!==tv2){spCards[j2]._tv=tv2;spCards[j2].style.translate=tv2}}
     }
   }
   function req(){if(!ticking){ticking=true;requestAnimationFrame(frame)}}
