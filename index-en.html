@@ -575,6 +575,24 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
 .rev-more:hover{color:var(--accent)}
 .rev.hl .rev-more{color:#fff}
 .rev.hl .rev-more:hover{color:#17120f}
+/* process steps: accents from the site palette */
+.step{position:relative;overflow:hidden;isolation:isolate}
+.step:nth-child(2){background:var(--accent);color:#fff}
+.step:nth-child(2) p{color:rgba(255,255,255,.86)}
+.step:nth-child(2) .no{background:#fff;color:var(--accent)}
+.step:nth-child(2) .tools em{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4);color:#fff}
+.step:nth-child(2) .ty-car{background:#fff}
+.step:nth-child(3){background:#ffe6d8}
+.step:nth-child(3) p{color:#6b4a3a}
+.step:nth-child(3) .no{background:var(--accent);color:#fff}
+.step:nth-child(3) .tools em{background:#fff;border-color:#ffd0b8}
+.step:nth-child(4){background:url(img/noise.png) 0 0/160px,radial-gradient(90% 120% at 90% 0%,#ff7a2e 0%,#d84a0c 32%,#4a1806 72%,#140d0a 100%);color:#fff}
+.step:nth-child(4) p{color:rgba(255,255,255,.82)}
+.step:nth-child(4) .no{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.step:nth-child(4) .tools em{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);color:#fff}
+.step:nth-child(4) .ty-car{background:#fff}
+.step:nth-child(1)::after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;border:22px solid rgba(255,90,20,.12);z-index:-1}
+.step:last-child::after{content:"";position:absolute;right:-50px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,90,20,.45),rgba(255,90,20,0) 70%);z-index:-1}
 </style>
 </head>
 <body>
