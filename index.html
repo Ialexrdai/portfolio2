@@ -534,6 +534,25 @@ body{margin:8px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 body,.tasks{background-image:url(img/noise.png);background-size:160px}
 .cta{background-image:url(img/noise.png),radial-gradient(70% 120% at 85% 10%,#ff7a2e 0%,#d84a0c 30%,#4a1806 70%,#140d0a 100%);background-size:160px,auto}
+/* about / path */
+.about{display:grid;grid-template-columns:minmax(260px,.8fr) 2fr;gap:clamp(32px,6vw,96px);align-items:start}
+.about-card{position:sticky;top:24px}
+.about-ph{border-radius:var(--r-xl);overflow:hidden;aspect-ratio:4/5;background:var(--mist)}
+.about-ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.about-name{margin-top:18px;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.about-facts{margin:14px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.about-facts dt{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8a817a}
+.about-facts dd{margin:4px 0 0;font-size:15px;font-weight:500}
+.about-facts a{color:inherit}
+.about-h{font-size:clamp(40px,6vw,84px);letter-spacing:-.05em;line-height:.95;font-weight:600}
+.about-h span{display:block;color:#c9c2bc}
+.path{margin-top:clamp(36px,5vw,64px);border-top:1px solid var(--line)}
+.path-row{display:grid;grid-template-columns:minmax(150px,.42fr) 1fr;gap:12px 40px;padding:28px 0;border-bottom:1px solid var(--line)}
+.path-y{font-size:clamp(28px,3vw,40px);font-weight:600;letter-spacing:-.04em;line-height:1;color:var(--accent)}
+.path-k{display:block;margin-top:8px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.path-row p{font-size:clamp(15px,1.25vw,18px);line-height:1.55;max-width:62ch}
+@media (max-width:900px){.about{grid-template-columns:1fr}.about-card{position:static;display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center}.about-ph{aspect-ratio:1}.about-name{margin-top:0}.about-card{order:2}}
+@media (max-width:600px){.path-row{grid-template-columns:1fr;padding:22px 0}.about-facts{grid-template-columns:1fr 1fr}.about-card{grid-template-columns:1fr}.about-ph{max-width:220px}}
 </style>
 </head>
 <body>
@@ -557,7 +576,11 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       <div class="navpill">
       <a class="logo" href="#top">ialexrd<sup>●</sup></a>
       <ul>
-        <li><a href="#cases">Кейсы</a></li>
+        <li><a href="#skills">Подход</a></li>
+        <li><a href="#apps">Веб-приложения</a></li>
+        <li><a href="#sites">Сайты</a></li>
+        <li><a href="#process">Процесс</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
       </ul>
       </div>
       <div class="lang" role="group" aria-label="Язык сайта"><button type="button" id="lang-ru" aria-pressed="true">RU</button><button type="button" id="lang-en" aria-pressed="false">EN</button></div>
@@ -606,7 +629,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       <p class="tasks-sub"><span class="ln"><span class="rv">Реализованные проекты</span></span></p>
       <p class="tasks-intro"><span class="rv">По каждому проекту коротко рассказываю, какая стояла задача, что я сделал и почему выбрал именно такое решение.</span></p>
     </div>
-    <p class="cs-gh">CRM и веб-приложения<span>04</span></p>
+    <p class="cs-gh" id="apps">CRM и веб-приложения<span>04</span></p>
     <div class="cs-grid">
       <a class="cs" href="voda.html">
         <div class="cs-pic"><img src="img/voda-laptop.jpg" alt="CRM клининг-сервиса «Вода» на ноутбуке" loading="lazy"></div>
@@ -633,7 +656,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
         <p>Расписание, форма записи, сводка и вся история клиента по номеру телефона.</p>
       </a>
     </div>
-    <p class="cs-gh">Сайты<span>08</span></p>
+    <p class="cs-gh" id="sites">Сайты<span>08</span></p>
     <div class="cs-grid">
       <a class="cs" data-href="s1-ceramic.html">
         <div class="cs-pic"><img src="img/site9.jpg" alt="S1 Ceramic на ноутбуке" loading="lazy"></div>
@@ -744,6 +767,33 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       <q>Расскажите о задаче в Telegram. Отвечаю в течение дня.</q>
       <a class="btn dark" style="align-self:flex-start" href="https://t.me/ialexrd" target="_blank" rel="noopener">Написать <span class="ar" aria-hidden="true">→</span></a>
     </article>
+  </div>
+</section>
+
+<section class="sec wrap" id="about" aria-labelledby="ab-h" style="padding-top:0">
+  <div class="about">
+    <div class="about-card">
+      <div class="about-ph"><img src="img/face.jpg" alt="Портрет Алексея Сухоплески" loading="lazy"></div>
+      <div>
+        <p class="about-name">Алексей Сухоплеска</p>
+        <dl class="about-facts">
+          <div><dt>Опыт</dt><dd>3 года</dd></div>
+          <div><dt>Город</dt><dd>Калининград</dd></div>
+          <div><dt>Ищу</dt><dd>Команду</dd></div>
+          <div><dt>Telegram</dt><dd><a href="https://t.me/ialexrd" target="_blank" rel="noopener">@ialexrd</a></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div>
+      <span class="eyebrow">Обо мне</span>
+      <h2 class="about-h" id="ab-h">Мой путь<span>или просто обо мне</span></h2>
+      <div class="path">
+        <div class="path-row"><div><span class="path-y">2021</span><span class="path-k">Учёба</span></div><p>Окончил ЮУрГУ, Высшую школу электронных и компьютерных наук. По профессии работать не пошёл и решил попробовать себя в коммерческой фотосъёмке: свадьбы, мероприятия, торжества и портреты. Тогда глубоко изучил Photoshop, обработку фотографий, работу со светом и цветом и уже начал тренировать насмотренность.</p></div>
+        <div class="path-row"><div><span class="path-y">2022</span><span class="path-k">Своё дело</span></div><p>Открыл небольшое дело, выездную химчистку мягкой мебели. Научился работать с людьми, отрабатывать возражения и понимать боли клиентов. Вёл заявки из ВКонтакте и с сайта, который сам собрал на шаблоне. Так у меня появилась база в маркетинге. И по сей день помогаю бизнесу обрабатывать заявки и привлекать новых клиентов.</p></div>
+        <div class="path-row"><div><span class="path-y">2023</span><span class="path-k">UX/UI-дизайн</span></div><p>Прошёл годовое обучение по UX/UI-дизайну, а в 2024 уже делал первые сайты, которые приносили заказчикам заявки. С тех пор создал больше 10 проектов. Для каждого глубоко анализировал нишу в городе клиента и обзванивал его покупателей, чтобы найти сильные стороны бизнеса и написать точные тексты.</p></div>
+        <div class="path-row"><div><span class="path-y">2026</span><span class="path-k">Вайбкодинг</span></div><p>На волне вайбкодинга начал осваивать это направление. Первым сделал веб-приложение для своего бизнеса и увидел, какие проблемы коллег по нише оно может решить.</p></div>
+      </div>
+    </div>
   </div>
 </section>
 
