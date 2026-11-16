@@ -531,6 +531,7 @@ body{margin:8px}
 @keyframes fadeDown{from{opacity:.001;transform:translateY(-16px)}to{opacity:1;transform:none}}
 @keyframes lineX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html::after{content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;background:url(img/noise.png) 0 0/160px 160px;transform:translateZ(0)}
 </style>
 </head>
 <body>
