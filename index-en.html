@@ -205,7 +205,7 @@ p{margin:0}
 .sites-note{margin-top:28px;display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;align-items:center}
 
 /* process */
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:s}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
 .step{background:var(--mist);border-radius:var(--r-lg);padding:22px 20px 24px;display:flex;flex-direction:column;gap:10px;min-height:250px}
 .step .no{width:38px;height:38px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-weight:700;font-size:14px;color:var(--accent);margin-bottom:28px}
 .step h3{font-size:21px;letter-spacing:-.02em}
@@ -213,11 +213,7 @@ p{margin:0}
 .step p{font-size:14px;color:var(--muted)}
 .step .tools{display:flex;gap:6px;flex-wrap:wrap}
 .step .tools em{font-style:normal;font-size:12px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:3px 9px}
-.step:last-child{background:var(--ink);color:var(--on-dark)}
-.step:last-child p{color:#b9aea6}
-.step:last-child .no{background:var(--accent);color:#fff}
-.step:last-child .tools em{background:transparent;border-color:#3a322d}
-@media (max-width:1000px){.steps{grid-template-columns:1fr 1fr}.step:last-child{grid-column:1/-1;min-height:0}}
+@media (max-width:1000px){.steps{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.steps{grid-template-columns:1fr}.step{min-height:0}}
 
 /* about */
@@ -593,7 +589,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
 .step:nth-child(5) .no{background:#fff;color:var(--accent)}
 .step:nth-child(5) .tools em{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4);color:#fff}
 .step:nth-child(5) .ty-car{background:#fff}
-.step:nth-child(4){background:#ffe6d8}
+.step:nth-child(4){background:#ffe6d8;color:var(--ink)}
 .step:nth-child(4) p{color:#6b4a3a}
 .step:nth-child(4) .no{background:var(--accent);color:#fff}
 .step:nth-child(4) .tools em{background:#fff;border-color:#ffd0b8}
@@ -781,8 +777,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
     <div class="step"><span class="no">01</span><h3>Task</h3><p>I figure out what the business is, who its clients are and what problem needs solving.</p><div class="tools"><em>Brief</em></div></div>
     <div class="step"><span class="no">02</span><h3>Structure</h3><p>I define the sections of the app or the blocks of the website and their order.</p><div class="tools"><em>Prototype</em></div></div>
     <div class="step"><span class="no">03</span><h3>Design</h3><p>I build a design system in Figma and refine the layouts with AI.</p><div class="tools"><em>Figma</em><em>AI</em></div></div>
-    <div class="step"><span class="no">04</span><h3>Development</h3><p>I write the code and test it on phone and desktop.</p><div class="tools"><em>VS Code</em><em>Claude Code</em></div></div>
-    <div class="step"><span class="no">05</span><h3>Launch</h3><p>I publish the project and take care of technical support.</p><div class="tools"><em>Release</em><em>Support</em></div></div>
+    <div class="step"><span class="no">04</span><h3>Development and launch</h3><p>I write code or build on Tilda and test it on phone and desktop. I publish the project and take care of technical support.</p><div class="tools"><em>VS Code</em><em>Claude Code</em><em>Tilda</em></div></div>
   </div>
 </section>
 
@@ -1188,7 +1183,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       parts.forEach(function(w){if(!w)return;if(/^\s+$/.test(w)){fr.appendChild(document.createTextNode(w));return}var s=document.createElement('span');s.className='sw';s.textContent=w;fr.appendChild(s);words.push({el:s,s:0})});tn.parentNode.replaceChild(fr,tn)})});
   [].slice.call(document.querySelectorAll('.cs h3 .sw,.tasks-sub .tw,.tasks-h .tw,.statement .w,.hero h1 .ln>span,.cs-tags')).forEach(function(el){if(!el.classList.contains('sw'))words.push({el:el,s:0,soft:true})});
 
-  var darkSel='.hero,.tasks,.cta,.sk.dark,.plan.feat,.step:last-child,.svc.photo',col=[1,1,1],tcol=[1,1,1];
+  var darkSel='.hero,.tasks,.cta,.sk.dark,.plan.feat,.step:nth-child(3),.svc.photo',col=[1,1,1],tcol=[1,1,1];
   var mx=0,my=0,px=0,py=0,cx=0,cy=0,moved=false,first=true,active=0,trail=[];
   addEventListener('pointermove',function(e){var el=document.elementFromPoint(e.clientX,e.clientY);overCases=!!(el&&el.closest&&el.closest('.tasks'));lastMove=performance.now();tcol=(el&&el.closest&&el.closest(darkSel))?[1,1,1]:[1,.353,.078];
     cx=e.clientX;cy=e.clientY;mx=cx/innerWidth;my=1-cy/innerHeight;if(first){px=mx;py=my;first=false}moved=true},{passive:true});
