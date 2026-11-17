@@ -233,7 +233,7 @@ p{margin:0}
 @media (max-width:860px){.about{grid-template-columns:1fr}.portrait{position:relative;top:0;order:-1;max-width:520px}}
 
 /* reviews */
-.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.revs{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .rev{border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:14px}
 .rev .res{font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.15}
 .rev .res span{color:var(--accent)}
@@ -247,7 +247,7 @@ p{margin:0}
 .rev.hl .who{border-color:rgba(255,255,255,.35)}
 .rev.hl .who small{color:#ffe0d0}
 .rev.hl .who i{background:#fff}
-@media (max-width:900px){.revs{grid-template-columns:1fr}}
+@media (max-width:1100px){.revs{grid-template-columns:1fr 1fr}}@media (max-width:640px){.revs{grid-template-columns:1fr}}
 
 /* contact */
 .cta{position:relative;overflow:hidden;border-radius:var(--r-xl);color:var(--on-dark);padding:clamp(40px,6vw,80px) clamp(22px,5vw,64px);
@@ -537,7 +537,7 @@ body{margin:8px 8px 0}
   .ty-rest{visibility:hidden}
   .js .revs>*{opacity:0;transform:translateY(48px) scale(.97);transition:opacity .8s ease,transform 1s cubic-bezier(.16,1,.3,1)}
   .js .revs.seen>*{opacity:1;transform:none}
-  .js .revs.seen>:nth-child(2){transition-delay:.08s}.js .revs.seen>:nth-child(3){transition-delay:.16s}.js .revs.seen>:nth-child(4){transition-delay:.24s}.js .revs.seen>:nth-child(5){transition-delay:.32s}.js .revs.seen>:nth-child(6){transition-delay:.4s}
+  .js .revs.seen>:nth-child(2){transition-delay:.08s}.js .revs.seen>:nth-child(3){transition-delay:.16s}.js .revs.seen>:nth-child(4){transition-delay:.24s}.js .revs.seen>:nth-child(5){transition-delay:.32s}.js .revs.seen>:nth-child(6){transition-delay:.4s}.js .revs.seen>:nth-child(7){transition-delay:.48s}.js .revs.seen>:nth-child(8){transition-delay:.56s}
   .js .path-y{opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1)}
   .js .path-row.seen .path-y{opacity:1;transform:none}
   .ty-car{display:inline-block;width:2px;height:1em;margin:0 -2px 0 0;vertical-align:-.12em;background:var(--accent);animation:tyBlink .8s steps(1) infinite}
@@ -787,7 +787,7 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       <span class="eyebrow">Reviews from VK</span>
       <h2 class="h2" id="rv-h">What clients say</h2>
     </div>
-    <p class="lead">Five reviews about websites. The full texts and more reviews are in my VK group.</p>
+    <p class="lead">Eight reviews about websites. The full texts and more reviews are in my VK group.</p>
   </div>
   <div class="revs">
     <article class="rev hl">
@@ -820,10 +820,23 @@ body,.tasks{background-image:url(img/noise.png);background-size:160px}
       <a class="rev-more" href="https://vk.ru/topic-223407542_55926557?offset=0" target="_blank" rel="noopener">Read in full</a>
       <div class="who"><i>A</i><div>Artyom Zakharov<small>Akademiki Football School</small></div></div>
     </article>
-    <article class="rev" style="background:var(--mist);border-color:var(--mist)">
-      <p class="res">Be the next one</p>
-      <q>Tell me about your task on Telegram.<br>I reply within a day.</q>
-      <a class="btn dark" style="align-self:flex-start;margin-top:auto" href="https://t.me/ialexrd" target="_blank" rel="noopener">Message me <span class="ar" aria-hidden="true">→</span></a>
+    <article class="rev">
+      <p class="res">Fast and <span>without delays</span></p>
+      <q>He did everything quickly and well and was always in touch. He understood right away what was needed, so the result turned out really interesting.</q>
+      <a class="rev-more" href="https://vk.ru/topic-223407542_55926557?offset=0" target="_blank" rel="noopener">Read in full</a>
+      <div class="who"><i>D</i><div>Danil Medvedev<small>AURA CLUB</small></div></div>
+    </article>
+    <article class="rev">
+      <p class="res">Design at <span>10 out of 10</span></p>
+      <q>The final result is superb. Edits were made within one working day, and there were no delays.</q>
+      <a class="rev-more" href="https://vk.ru/topic-223407542_55926557?offset=0" target="_blank" rel="noopener">Read in full</a>
+      <div class="who"><i>I</i><div>Ivan Shavrin<small>Business website</small></div></div>
+    </article>
+    <article class="rev">
+      <p class="res">Explained it <span>in plain words</span></p>
+      <q>I know nothing about websites, but Alexey helped with the structure and explained everything. The landing page came out neat and clear.</q>
+      <a class="rev-more" href="https://vk.ru/topic-223407542_55926557?offset=0" target="_blank" rel="noopener">Read in full</a>
+      <div class="who"><i>E</i><div>Evgeny Lukyanov<small>Landing page</small></div></div>
     </article>
   </div>
 </section>
